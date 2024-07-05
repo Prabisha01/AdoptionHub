@@ -1,130 +1,74 @@
-import React, { useState } from "react";
-import { loginUserApi } from "../apis/Api";
-import mainImage from '../images/landingpage.png';
-import { toast } from "react-toastify";
-import { Link, useNavigate } from 'react-router-dom'; 
-import UpNavbar from "../components/UpNavbar";
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React,{ useState }from 'react';
+import { Link } from 'react-router-dom';
 
-const Login = () => {
-  const navigate = useNavigate();
-  const outerContainerStyle = {
-    position: 'relative',
-    height: '100vh', // Ensuring the container takes up the full viewport height
-    overflow: 'hidden', // Prevent overflow
-  };
+const LoginModal = ({ isOpen, onClose,onOpenSignup }) => {
 
-  const blurredContainerStyle = {
-    filter: 'blur(3px)', // Apply the blur effect
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    top: '0',
-    left: '0',
-  };
-
-  const mainImageStyle = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover', // Ensure the image covers the entire container
-  };
-
-  const navbarStyle = {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '100%',
-    backgroundColor: 'white', // White background for the header
-    zIndex: '1000', // Ensure the navbar stays on top
-  };
-
-  const modalStyle = {
-    position: 'absolute',
-    top: '96px',
-    left: '169px',
-    width: '1145px',
-    height: '600px',
-    backgroundColor: 'white',
-    borderRadius: '25px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    border: '1px solid black',
-    zIndex: '1001', // Ensure the modal stays on top of other content
-  };
-
-  const additionalContainerStyle = {
-    position: 'absolute',
-    top: '1118px',
-    left: '185px',
-    width: '523px',
-    height: '662px',
-    backgroundColor: 'white',
-    borderRadius: '40px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    border: '1px solid black',
-    zIndex: '1002', // Ensure the additional container stays on top of other content
-  };
-
-  const closeButtonStyle = {
-    position: 'absolute',
-    top: '22px', // Adjusted for a more reasonable placement within the modal
-    right: '22px', // Adjusted for a more reasonable placement within the modal
-    width: '29px',
-    height: '27px',
-    cursor: 'pointer',
-    zIndex: '1003', // Ensure the close button stays on top of the modal
-  };
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(email, password);
-
-    const data = {
-      email: email,
-      password: password,
-    };
-
-    loginUserApi(data)
-      .then((res) => {
-        if (res.data.success === false) {
-          toast.error(res.data.message);
-        } else {
-          toast.success(res.data.message);
-          localStorage.setItem("token", res.data.token);
-          const jsonDecode = JSON.stringify(res.data.userData);
-          localStorage.setItem("user", jsonDecode);
-
-          if (res.data.userData.isAdmin){
-            navigate('/admin/dashboard');
-          } else {
-            navigate('/products');
-          }
-        }
-      })
-      .catch((err) => {
-        toast.error("Server Error");
-        console.log(err.message);
-      });
-  };
+  if (!isOpen) return null;
 
   return (
-    <div style={outerContainerStyle}>
-      <div style={blurredContainerStyle}>
-        <div style={navbarStyle}>
-          <UpNavbar />
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg shadow-lg flex">
+        <div className="w-1/2">
+          <img src="assets/images/login.png" alt="Adopt Me" className="h-[600px] w-[600px] object-cover rounded-l-lg" />
         </div>
-        <img src={mainImage} alt="Main" style={mainImageStyle} />
-      </div>
-      <div style={modalStyle}>
-        <button style={closeButtonStyle} onClick={() => navigate('/home')}>X</button>
-        {/* Add your form or other content here */}
-      </div>
-      <div style={additionalContainerStyle}>
-        {/* Additional content here */}
+        <div className="w-1/2 p-6 relative">
+          <button onClick={onClose} className="absolute top-4 right-4 text-gray-700 text-xl">&times;</button>
+          <img src="assets/logo/logo.png" alt="" className='mb-5' />
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Welcome to <span className="text-orange-500">AdoptionHub</span> !!</h2>
+          <form>
+          <div className="mb-4">
+            <div className="relative">
+              <span className="absolute bottom-3 flex items-center pl-3">
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  className="text-gray-950"
+                />
+              </span>
+              <input
+              placeholder='Email Address'
+                type="email"
+                className="w-full pl-8 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-950"
+              />
+            </div>
+          </div>
+          <div className="mb-4">
+            <div className="relative">
+              <span className="absolute bottom-3 flex items-center pl-3">
+                <FontAwesomeIcon
+                  icon={faLock}
+                  className="text-gray-950"
+                />
+              </span>
+              <input
+              placeholder='Password'
+                type="email"
+                className="w-full pl-8 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-950"
+              />
+            </div>
+          </div>
+            <div className="flex items-center justify-between mb-4">
+              <a href="#" className="inline-block align-baseline font-bold text-sm text-black hover:text-orange-800">
+                Forgot Password?
+              </a>
+            </div>
+            <div className="flex flex-col items-start gap-3">
+              <button
+                className="bg-orange-500 w-full hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+              >
+                Login
+              </button>
+              <a href="#" className="inline-block align-baseline font-bold text-sm text-black">
+                Not a member?<Link className='text-blue-800 underline' onClick={onOpenSignup}> Sign Up </Link>        
+              </a>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginModal;

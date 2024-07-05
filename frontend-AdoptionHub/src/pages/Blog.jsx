@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import { getAllBlogsApi, getUserBlogPaginationApi, searchBlogsApi } from '../apis/Api';
+import React, { useEffect, useState } from "react";
+import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
 import { Link, useNavigate } from "react-router-dom";
+import { getUserBlogPaginationApi, searchBlogsApi } from "../apis/Api";
+import Navbar from "../components/Navbar";
 import img1 from "../images/logo.png";
-import { FaHeart, FaShoppingCart } from "react-icons/fa";
 
 const Blog = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [blogs, setBlogs] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchBlogs();
@@ -23,8 +23,6 @@ const Blog = () => {
     localStorage.clear();
     navigate("/land");
   };
-
-
 
   const fetchBlogs = () => {
     if (searchQuery) {
@@ -39,7 +37,7 @@ const Blog = () => {
           }
         })
         .catch((error) => {
-          console.error('Error in searchBlogsApi:', error);
+          console.error("Error in searchBlogsApi:", error);
         });
     } else {
       getUserBlogPaginationApi(currentPage)
@@ -53,7 +51,7 @@ const Blog = () => {
           }
         })
         .catch((error) => {
-          console.error('Error in getUserProductPaginationApi:', error);
+          console.error("Error in getUserProductPaginationApi:", error);
         });
     }
   };
@@ -65,146 +63,149 @@ const Blog = () => {
     fetchBlogs();
   };
 
-
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="#">
-          <img src={img1} alt="" style={{ height: "50px", width: "210px" }} />
-        </a>
-        <ul
-          className="navbar-nav"
-          style={{ marginLeft: "14rem" }}
-          role="search"
-        >
-          <li className="nav-item">
-            <form className="d-flex mx-auto">
-              <input
-                className="form-control custom-search-lg  border-dark"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-                style={{
-                  width: "400px",
-                  height: "calc(1.5em + 0.75rem + 2px)",
-                  borderRadius: "0.25rem",
-                }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-               />
-             <button type="button" className="btn btn-success ms-2" onClick={handleSearch}>
-             Search
-           </button>
-            </form>
-          </li>
-        </ul>
-        <form className="navbar-nav ms-auto">
-          <li className="nav-item">
-            {user ? (
-              <>
-                <div
-                  className="d-flex align-items-center "
-                  style={{ marginLeft: "7rem" }}
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">
+            <img src={img1} alt="" style={{ height: "50px", width: "210px" }} />
+          </a>
+          <ul
+            className="navbar-nav"
+            style={{ marginLeft: "14rem" }}
+            role="search"
+          >
+            <li className="nav-item">
+              <form className="d-flex mx-auto">
+                <input
+                  className="form-control custom-search-lg  border-dark"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  style={{
+                    width: "400px",
+                    height: "calc(1.5em + 0.75rem + 2px)",
+                    borderRadius: "0.25rem",
+                  }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="btn btn-success ms-2"
+                  onClick={handleSearch}
                 >
-                  <img
-                    src={`${user.userImageUrl}`}
-                    alt=""
-                    className="rounded-circle me-2"
-                    style={{ width: "40px", height: "40px" }}
-                  />
+                  Search
+                </button>
+              </form>
+            </li>
+          </ul>
+          <form className="navbar-nav ms-auto">
+            <li className="nav-item">
+              {user ? (
+                <>
+                  <div
+                    className="d-flex align-items-center "
+                    style={{ marginLeft: "7rem" }}
+                  >
+                    <img
+                      src={`${user.userImageUrl}`}
+                      alt=""
+                      className="rounded-circle me-2"
+                      style={{ width: "40px", height: "40px" }}
+                    />
 
-                  <div class="dropdown">
-                    <button
-                      class="btn btn-outline-light border-0  dropdown-toggle fs-5 text-success "
-                      type="button"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      Welcome{" "}
-                      <span className="text-dark">{user.firstName}</span>!
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <Link
-                          class="dropdown-item"
-                          to={`/profile/edit/${user._id}`}
-                        >
-                          Profile
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          class="dropdown-item"
-                          to={`/changePassword/${user._id}`}
-                        >
-                          Reset Password
-                        </Link>
-                      </li>
-                      <li>
-                        <button
-                          onClick={handlelogout}
-                          class="dropdown-item"
-                          to="/logout"
-                        >
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
+                    <div className="dropdown">
+                      <button
+                        className="btn btn-outline-light border-0  dropdown-toggle fs-5 text-success "
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      >
+                        Welcome{" "}
+                        <span className="text-dark">{user.firstName}</span>!
+                      </button>
+                      <ul className="dropdown-menu">
+                        <li>
+                          <Link
+                            className="dropdown-item"
+                            to={`/profile/edit/${user._id}`}
+                          >
+                            Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            className="dropdown-item"
+                            to={`/changePassword/${user._id}`}
+                          >
+                            Reset Password
+                          </Link>
+                        </li>
+                        <li>
+                          <button
+                            onClick={handlelogout}
+                            className="dropdown-item"
+                            to="/logout"
+                          >
+                            Logout
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
+                </>
+              ) : (
+                <>
+                  <Link
+                    className="btn btn-outline-dark rounded-pill me-2 "
+                    style={{ marginLeft: "9rem" }}
+                    to={"/login"}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    className="btn btn-outline-dark rounded-pill  me-3"
+                    to={"/signup"}
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+            </li>
+          </form>
+          {/* Wishlist and Cart Icons */}
+          <ul className="navbar-nav ms-auto">
+            {/* ... */}
+            <li className="nav-item">
+              <a className="nav-link icon-red" href="#">
+                <FaHeart className="text-red fs-5" />
+                <span className="visually-hidden">Cart</span>
                 <Link
-                  className="btn btn-outline-dark rounded-pill me-2 "
-                  style={{ marginLeft: "9rem" }}
-                  to={"/login"}
+                  className="text-dark ms-1"
+                  to="/wishlist"
+                  style={{ textDecoration: "none" }}
                 >
-                  Login
+                  Wishlist
                 </Link>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link icon-green" href="#">
+                <FaShoppingCart className="text-green fs-5" />
+                <span className="visually-hidden">Cart</span>
                 <Link
-                  className="btn btn-outline-dark rounded-pill  me-3"
-                  to={"/signup"}
+                  className="text-dark ms-1"
+                  to="/addtocart"
+                  style={{ textDecoration: "none" }}
                 >
-                  Register
+                  Cart
                 </Link>
-              </>
-            )}
-          </li>
-        </form>
-        {/* Wishlist and Cart Icons */}
-        <ul className="navbar-nav ms-auto">
-          {/* ... */}
-          <li className="nav-item">
-            <a className="nav-link icon-red" href="#">
-              <FaHeart className="text-red fs-5" />
-              <span className="visually-hidden">Cart</span>
-              <Link
-                className="text-dark ms-1"
-                to="/wishlist"
-                style={{ textDecoration: "none" }}
-              >
-                Wishlist
-              </Link>
-            </a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link icon-green" href="#">
-              <FaShoppingCart className="text-green fs-5" />
-              <span className="visually-hidden">Cart</span>
-              <Link
-                className="text-dark ms-1"
-                to="/addtocart"
-                style={{ textDecoration: "none" }}
-              >
-                Cart
-              </Link>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
       <div>
         <Navbar />
       </div>
@@ -215,14 +216,16 @@ const Blog = () => {
               <div className="card">
                 <img
                   src={blog.blogImageUrl}
-                  style={{ height: '200px', width: '100%', objectFit: 'cover' }}
+                  style={{ height: "200px", width: "100%", objectFit: "cover" }}
                   className="card-img-top img-fluid"
                   alt={`Blog ${blog.blogId}`}
                 />
                 <div className="card-body">
                   <h5 className="card-title">{blog.blogTitle}</h5>
                   <p className="card-text">Author: {blog.blogAuthor}</p>
-                  <p className="card-text">Date: {new Date(blog.blogDate).toLocaleDateString()}</p>
+                  <p className="card-text">
+                    Date: {new Date(blog.blogDate).toLocaleDateString()}
+                  </p>
                   <p className="card-text">Category: {blog.blogCategory}</p>
                   <p className="card-text">Content: {blog.blogContent}</p>
                   <a
@@ -249,22 +252,22 @@ const Blog = () => {
         </div>
       </div>
       <ReactPaginate
-          pageCount={totalPages}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          onPageChange={paginate}
-          containerClassName="pagination justify-content-center"
-          activeClassName="page-item active"
-          pageLinkClassName="page-link text-success bg-light"
-          previousClassName={`page-item ${currentPage === 1 ? "disabled" : ""}`}
-          nextClassName={`page-item ${
-            currentPage === totalPages ? "disabled" : ""
-          }`}
-          previousLinkClassName="page-link text-success"
-          nextLinkClassName="page-link text-success"
-          breakClassName="page-item"
-          breakLinkClassName="page-link text-success"
-        />
+        pageCount={totalPages}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={2}
+        onPageChange={paginate}
+        containerClassName="pagination justify-content-center"
+        activeClassName="page-item active"
+        pageLinkClassName="page-link text-success bg-light"
+        previousClassName={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+        nextClassName={`page-item ${
+          currentPage === totalPages ? "disabled" : ""
+        }`}
+        previousLinkClassName="page-link text-success"
+        nextLinkClassName="page-link text-success"
+        breakClassName="page-item"
+        breakLinkClassName="page-link text-success"
+      />
     </>
   );
 };

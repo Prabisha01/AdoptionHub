@@ -1,41 +1,71 @@
-import React from 'react';
-import UpNavbar from '../components/UpNavbar';
-import faqImage from '../images/faq.png'; // Adjust this path if incorrect
+import React, { useState } from "react";
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
 
 const Faq = () => {
-  // Styles defined here for clarity
-  const containerStyle = {
-    position: 'relative',
-    minHeight: '200vh',
-  };
+  const [openIndex, setOpenIndex] = useState(null);
 
-  const navbarStyle = {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '100%',
-    backgroundColor: 'white',
-    zIndex: '1000',
-  };
+  const faqs = [
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+    "Where does the money of the donation go ?",
+  ];
 
-  const faqImageStyle = {
-    position: 'absolute',
-    top: '96px',
-    left: '0',
-    width: '1535px',
-    height: '608px',
+  const toggleFaq = (index) => {
+    if (openIndex === index) {
+      setOpenIndex(null);
+    } else {
+      setOpenIndex(index);
+    }
   };
-
-  // Ensure the component renders correctly and the path is correct
-  console.log("Image path:", faqImage);
 
   return (
-    <div style={containerStyle}>
-      <div style={navbarStyle}>
-        <UpNavbar />
+    <div className="flex flex-col items-center min-h-screen bg-gray-50">
+      <img
+        src="assets/images/faq.png"
+        alt="Background"
+        className="w-full h-64"
+      />
+      <div className="bg-white mt-[-145px] p-8 rounded-lg shadow-lg w-full max-w-3xl">
+        <h2 className="text-2xl font-bold mb-4">Frequently Asked Questions</h2>
+        {faqs.map((faq, index) => (
+          <div key={index} className="mb-2">
+            <button
+              onClick={() => toggleFaq(index)}
+              className={`flex justify-between w-full p-2 border rounded bg-gray-100 hover:bg-gray-200 focus:outline-none ${
+                openIndex === index ? "text-blue-500" : "text-black"
+              }`}
+            >
+              <span>{faq}</span>
+              <span>
+                {openIndex === index ? <FiChevronUp /> : <FiChevronDown />}
+              </span>
+            </button>
+            {openIndex === index && (
+              <div className="p-2 bg-white border-l-2 border-b-2 border-r-2 border-gray-200 rounded-b">
+                <p>
+                  The money of the donation goes in the betterment of the pet.
+                  They get better care, materials and food. The money of the
+                  donation goes in the betterment of the pet. They get better
+                  care, materials and food. The money of the donation goes in
+                  the betterment of the pet. They get better care, materials and
+                  food.The money of the donation goes in the betterment of the
+                  pet. They get better care, materials and food. The money of
+                  the donation goes in the betterment of the pet. They get
+                  better care, materials and food. The money of the donation
+                  goes in the betterment of the pet. They get better care,
+                  materials and food.
+                </p>
+              </div>
+            )}
+          </div>
+        ))}
       </div>
-      {/* Check if the image URL is correct by inspecting the element or checking the console */}
-      <img src={faqImage} alt="FAQ" style={faqImageStyle} />
     </div>
   );
 };

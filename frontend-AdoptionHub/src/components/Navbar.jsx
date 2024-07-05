@@ -7,8 +7,11 @@ import {
   Transition,
 } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoginModal from "../pages/Login";
+import RegisterModal from "../pages/Register";
 
 const navigation = [
   { name: "Adopt", href: "/", current: false },
@@ -31,11 +34,29 @@ export default function Navbar() {
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
 
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+    setIsSignupModalOpen(false);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const openSignupModal = () => {
+    setIsSignupModalOpen(true);
+    setIsLoginModalOpen(false);
+  };
+
+  const closeSignupModal = () => {
+    setIsSignupModalOpen(false);
+  };
+
   return (
-    <Disclosure
-      as="nav"
-      className="p-2 bg-white border-gray-500 z-50"
-    >
+    <Disclosure as="nav" className="p-2 bg-white border-gray-500 z-50">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -52,7 +73,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start mr-5">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to={"/"}>
+                  <Link to={"/home"}>
                     <img
                       className="h-16 w-auto"
                       src="assets/logo/logo.png"
@@ -150,14 +171,16 @@ export default function Navbar() {
                 ) : (
                   <div className="relative gap-3 ml-1 hidden sm:flex sm:flex-row md:items-center">
                     <Link
-                      to="/login"
-                      className="w-full bg-[#F24E1E] border-solid text-white px-4 p-2 rounded-lg"
+                     onClick={openLoginModal}
+                      className="w-full bg-[#FFFFFF] hover:bg-[#F24E1E] outline border-solid text-black px-4 p-2 rounded-lg"
                     >
                       Login
                     </Link>
+                    <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} onOpenSignup={openSignupModal} />
+                    <RegisterModal isOpen={isSignupModalOpen} onClose={closeSignupModal} onOpenLogin={openLoginModal} />
                     <Link
                       to="/signup"
-                      className="w-full bg-[#F24E1E] text-white px-4 p-2 rounded"
+                      className="w-full bg-[#F24E1E] hover:bg-[#F24E1E] text-white px-4 p-2 rounded"
                     >
                       Donor
                     </Link>
@@ -210,33 +233,33 @@ export default function Navbar() {
 
 //   return (
 //     <>
-//       <nav class="bg-white border-gray-200 dark:bg-gray-900">
-//         <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
+//       <nav className="bg-white border-gray-200 dark:bg-gray-900">
+//         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
 //           <a
-//             class="flex items-center space-x-3 rtl:space-x-reverse"
+//             className="flex items-center space-x-3 rtl:space-x-reverse"
 //           >
-//             <img src="assets/logo/logo.png" class="h-14" alt="Adoption Hub" />
+//             <img src="assets/logo/logo.png" className="h-14" alt="Adoption Hub" />
 //           </a>
-//           <div class="flex items-center space-x-6 rtl:space-x-reverse">
+//           <div className="flex items-center space-x-6 rtl:space-x-reverse">
 //             <a
 //               href="tel:5541251234"
-//               class="text-sm text-gray-500 dark:text-white hover:underline"
+//               className="text-sm text-gray-500 dark:text-white hover:underline"
 //             >
 //               Profile here
 //             </a>
 //             <a
 //               href="#"
-//               class="text-sm px-8 py-2 rounded bg-[#FF8534] hover:bg-[#F24E1E] text-white font-medium"
+//               className="text-sm px-8 py-2 rounded bg-[#FF8534] hover:bg-[#F24E1E] text-white font-medium"
 //             >
 //               Donor
 //             </a>
 //           </div>
 //         </div>
 //       </nav>
-//       <nav class="bg-gray-50 dark:bg-gray-700">
-//         <div class="max-w-screen-xl px-4 py-3 mx-auto">
-//           <div class="flex items-center">
-//             <ul class="flex flex-row mt-0 text-2xl font-semibold space-x-20 rtl:space-x-reverse">
+//       <nav className="bg-gray-50 dark:bg-gray-700">
+//         <div className="max-w-screen-xl px-4 py-3 mx-auto">
+//           <div className="flex items-center">
+//             <ul className="flex flex-row mt-0 text-2xl font-semibold space-x-20 rtl:space-x-reverse">
 //               {["Home", "Adopt", "Shop", "Event", "Donate", "Contact", "Story"].map((item, index) => (
 //                 <li key={index}>
 //                   <NavLink

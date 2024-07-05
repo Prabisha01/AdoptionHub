@@ -6,6 +6,10 @@ import "./App.css";
 import NavBar from "./components/Navbar";
 import AdoptWithToken from "./pages/AdoptWithToken";
 import LandingPage from "./pages/LandingPage";
+import Footer from "./components/Footer";
+import Faq from "./pages/Faq";
+import TermsAndConditions from "./pages/Terms";
+import About from "./pages/About";
 
 function App() {
   return (
@@ -14,11 +18,16 @@ function App() {
       <NavBar />
       <Routes>
         {/* <Route path="/home" element={<Homepage />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} /> */}
+         {/* <Route path="/login" element={<LoginPage />} /> */}
         <Route path="/home" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/faq" element={<Faq />} />
+        <Route path="/terms-and-condition" element={<TermsAndConditions />} />
+        <Route path="/about" element={<About />} />
         <Route path="/adopt-with-token" element={<AdoptWithToken />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }

@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import Navbar from "../components/Navbar";
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faHeart } from '@fortawesome/free-solid-svg-icons';
-import { getUserProductPaginationApi, addToWishlistApi, searchProductsApi, addToCartApi } from '../apis/Api';
+import { faHeart, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
 import ReactPaginate from "react-paginate";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import {
+  addToCartApi,
+  addToWishlistApi,
+  getUserProductPaginationApi,
+  searchProductsApi,
+} from "../apis/Api";
+import Navbar from "../components/Navbar";
 import img1 from "../images/logo.png";
-import { toast } from 'react-toastify';
-import { FaHeart, FaShoppingCart } from "react-icons/fa";
 // import io from "socket.io-client";
 
 // const socket = io("http://localhost:5000");
@@ -28,7 +32,7 @@ const Product = () => {
   //     socket.off("new_notification");
   //   };
   // }, []);
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
@@ -41,7 +45,7 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [wishlistCount, setWishlistCount] = useState(0);
   const [cartCount, setCartCount] = useState(0);
@@ -63,7 +67,7 @@ const Product = () => {
           }
         })
         .catch((error) => {
-          console.error('Error in searchProductsApi:', error);
+          console.error("Error in searchProductsApi:", error);
         });
     } else {
       getUserProductPaginationApi(currentPage)
@@ -77,7 +81,7 @@ const Product = () => {
           }
         })
         .catch((error) => {
-          console.error('Error in getUserProductPaginationApi:', error);
+          console.error("Error in getUserProductPaginationApi:", error);
         });
     }
   };
@@ -88,7 +92,7 @@ const Product = () => {
   const handleAdd = (e, plantId) => {
     e.preventDefault();
 
-    const storedUserData = localStorage.getItem('user');
+    const storedUserData = localStorage.getItem("user");
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       const userId = parsedUserData._id;
@@ -108,18 +112,18 @@ const Product = () => {
           }
         })
         .catch((err) => {
-          toast.error('Server error');
+          toast.error("Server error");
           console.log(err.message);
         });
     } else {
-      console.log('User data not found in localstorage');
+      console.log("User data not found in localstorage");
     }
   };
 
   const handleAddToCart = (e, plantId) => {
     e.preventDefault();
 
-    const storedUserData = localStorage.getItem('user');
+    const storedUserData = localStorage.getItem("user");
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       const userId = parsedUserData._id;
@@ -145,7 +149,7 @@ const Product = () => {
           console.log(e);
         });
     } else {
-      console.log('User data not found in localstorage');
+      console.log("User data not found in localstorage");
     }
   };
 
@@ -161,7 +165,11 @@ const Product = () => {
           <a className="navbar-brand" href="#">
             <img src={img1} alt="" style={{ height: "50px", width: "210px" }} />
           </a>
-          <ul className="navbar-nav" style={{ marginLeft: "14rem" }} role="search">
+          <ul
+            className="navbar-nav"
+            style={{ marginLeft: "14rem" }}
+            role="search"
+          >
             <li className="nav-item">
               <form className="d-flex mx-auto">
                 <input
@@ -177,7 +185,11 @@ const Product = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-                <button type="button" className="btn btn-success ms-2" onClick={handleSearch}>
+                <button
+                  type="button"
+                  className="btn btn-success ms-2"
+                  onClick={handleSearch}
+                >
                   Search
                 </button>
               </form>
@@ -187,16 +199,19 @@ const Product = () => {
             <li className="nav-item">
               {user ? (
                 <>
-                  <div className="d-flex align-items-center " style={{ marginLeft: "7rem" }}>
+                  <div
+                    className="d-flex align-items-center "
+                    style={{ marginLeft: "7rem" }}
+                  >
                     <img
                       src={`${user.userImageUrl}`}
                       alt=""
                       className="rounded-circle me-2"
                       style={{ width: "40px", height: "40px" }}
                     />
-                    <div class="dropdown">
+                    <div className="dropdown">
                       <button
-                        class="btn btn-outline-light border-0  dropdown-toggle fs-5 text-success "
+                        className="btn btn-outline-light border-0  dropdown-toggle fs-5 text-success "
                         type="button"
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
@@ -204,19 +219,29 @@ const Product = () => {
                         Welcome{" "}
                         <span className="text-dark">{user.firstName}</span>!
                       </button>
-                      <ul class="dropdown-menu">
+                      <ul className="dropdown-menu">
                         <li>
-                          <Link class="dropdown-item" to={`/profile/edit/${user._id}`}>
+                          <Link
+                            className="dropdown-item"
+                            to={`/profile/edit/${user._id}`}
+                          >
                             Profile
                           </Link>
                         </li>
                         <li>
-                          <Link class="dropdown-item" to={`/changePassword/${user._id}`}>
+                          <Link
+                            className="dropdown-item"
+                            to={`/changePassword/${user._id}`}
+                          >
                             Reset Password
                           </Link>
                         </li>
                         <li>
-                          <button onClick={handlelogout} class="dropdown-item" to="/logout">
+                          <button
+                            onClick={handlelogout}
+                            className="dropdown-item"
+                            to="/logout"
+                          >
                             Logout
                           </button>
                         </li>
@@ -246,8 +271,13 @@ const Product = () => {
           {/* Wishlist and Cart Icons */}
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <a className={`nav-link icon-${cartCount > 0 ? 'green' : 'red'}`} href="#">
-                <FaShoppingCart className={`text-${cartCount > 0 ? 'green' : 'red'} fs-5`} />
+              <a
+                className={`nav-link icon-${cartCount > 0 ? "green" : "red"}`}
+                href="#"
+              >
+                <FaShoppingCart
+                  className={`text-${cartCount > 0 ? "green" : "red"} fs-5`}
+                />
                 <span className="visually-hidden">Cart</span>
                 <Link
                   className="text-dark ms-1"
@@ -282,10 +312,10 @@ const Product = () => {
       <div className="container mt-4">
         <h2
           style={{
-            color: 'green',
-            fontSize: '2em',
-            fontWeight: 'bold',
-            marginBottom: '20px',
+            color: "green",
+            fontSize: "2em",
+            fontWeight: "bold",
+            marginBottom: "20px",
           }}
         >
           Available Product
@@ -300,18 +330,20 @@ const Product = () => {
                   <Link
                     to={`/productDetails/${item._id}`}
                     className="card-link"
-                    style={{ textDecoration: 'none', color: 'black' }}
+                    style={{ textDecoration: "none", color: "black" }}
                   >
                     <img
                       src={item.plantImageUrl}
                       className="card-img-top img-fluid"
                       alt={item.plantName}
-                      style={{ height: '200px', objectFit: 'cover' }}
+                      style={{ height: "200px", objectFit: "cover" }}
                     />
                     <div className="card-body">
                       <h5 className="card-title">{item.plantName}</h5>
                       <p className="card-text">Price: ${item.plantPrice}</p>
-                      <p className="card-text">Category: {item.plantCategory}</p>
+                      <p className="card-text">
+                        Category: {item.plantCategory}
+                      </p>
                       <p className="card-text">
                         Description: {item.plantDescription.slice(0, 50)}
                       </p>
@@ -321,7 +353,7 @@ const Product = () => {
                     <button
                       className="btn btn-success mt-3 me-2"
                       onClick={(e) => {
-                        handleAddToCart(e, item._id)
+                        handleAddToCart(e, item._id);
                       }}
                     >
                       <FontAwesomeIcon icon={faShoppingCart} />
@@ -330,7 +362,7 @@ const Product = () => {
                       className="btn btn-danger mt-3 me-2"
                       onDoubleClick={(e) => {
                         // Prevent default behavior
-                        handleAdd(e, item._id)
+                        handleAdd(e, item._id);
                       }}
                     >
                       <FontAwesomeIcon icon={faHeart} />
