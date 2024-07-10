@@ -12,11 +12,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoginModal from "../pages/Login";
 import RegisterModal from "../pages/Register";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartArrowDown, faRightFromBracket, faShop, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const navigation = [
-  { name: "Adopt", href: "/", current: false },
-  { name: "Shop", href: "#", current: false },
-  { name: "Donate", href: "/donation-form", current: false },
+  { name: "Adopt", href: "/adopt", current: false },
+  { name: "Shop", href: "/products", current: false },
+  { name: "Event", href: "/donation-form", current: false },
 ];
 
 function classNames(...classes) {
@@ -24,17 +26,17 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const logout = (e) => {
     e.preventDefault();
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
     toast.success("Logged out successfully");
   };
-  const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
-
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
   const openLoginModal = () => {
@@ -76,13 +78,13 @@ export default function Navbar() {
                   <Link to={"/home"}>
                     <img
                       className="h-16 w-auto"
-                      src="assets/logo/logo.png"
-                      alt=""
+                      src="/assets/logo/logo.png"
+                      alt="logo here"
                     />
                   </Link>
                 </div>
               </div>
-              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              <div className="inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-2">
                     {navigation.map((item) => (
@@ -112,7 +114,9 @@ export default function Navbar() {
                         <span className="sr-only">Open user menu</span>
                         <img
                           className="h-8 w-8 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          src={
+                            user?.userImageUrl ? user?.userImageUrl : "/assets/images/profile.png"
+                          }
                           alt=""
                         />
                       </MenuButton>
@@ -126,29 +130,29 @@ export default function Navbar() {
                       leaveTo="transform opacity-0 scale-95"
                     >
                       <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <MenuItem>
+                       <MenuItem>
                           {({ focus }) => (
                             <Link
-                              to="/profile"
+                              href="#"
                               className={classNames(
-                                focus ? "bg-gray-100" : "",
+                                focus ? "bg-[#F24E1E]" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
-                              Your Profile
+                             < FontAwesomeIcon className="me-1" icon={faUser}/> Profile
                             </Link>
                           )}
                         </MenuItem>
                         <MenuItem>
                           {({ focus }) => (
                             <Link
-                              href="#"
+                              to={`/profile/${user._id}`}
                               className={classNames(
-                                focus ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                focus ? "bg-[#F24E1E]" : "",
+                                "block px-4 py-2 text-sm text-gray-950"
                               )}
                             >
-                              Settings
+                            <FontAwesomeIcon className="me-1" icon={faCartArrowDown} /> Cart
                             </Link>
                           )}
                         </MenuItem>
@@ -157,11 +161,11 @@ export default function Navbar() {
                             <Link
                               onClick={logout}
                               className={classNames(
-                                focus ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
+                                focus ? "bg-[#F24E1E]" : "",
+                                "block px-4 py-2 text-sm text-gray-950"
                               )}
                             >
-                              Logout
+                            <FontAwesomeIcon className="me-2" icon={faRightFromBracket}/>Logout
                             </Link>
                           )}
                         </MenuItem>
@@ -171,13 +175,21 @@ export default function Navbar() {
                 ) : (
                   <div className="relative gap-3 ml-1 hidden sm:flex sm:flex-row md:items-center">
                     <Link
-                     onClick={openLoginModal}
+                      onClick={openLoginModal}
                       className="w-full bg-[#FFFFFF] hover:bg-[#F24E1E] outline border-solid text-black px-4 p-2 rounded-lg"
                     >
                       Login
                     </Link>
-                    <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} onOpenSignup={openSignupModal} />
-                    <RegisterModal isOpen={isSignupModalOpen} onClose={closeSignupModal} onOpenLogin={openLoginModal} />
+                    <LoginModal
+                      isOpen={isLoginModalOpen}
+                      onClose={closeLoginModal}
+                      onOpenSignup={openSignupModal}
+                    />
+                    <RegisterModal
+                      isOpen={isSignupModalOpen}
+                      onClose={closeSignupModal}
+                      onOpenLogin={openLoginModal}
+                    />
                     <Link
                       to="/signup"
                       className="w-full bg-[#F24E1E] hover:bg-[#F24E1E] text-white px-4 p-2 rounded"
@@ -217,68 +229,3 @@ export default function Navbar() {
     </Disclosure>
   );
 }
-
-// import { useNavigate, NavLink } from "react-router-dom";
-// import { toast } from "react-toastify";
-
-// export default function Navbar() {
-//   const navigate = useNavigate();
-//   const logout = (e) => {
-//     e.preventDefault();
-//     localStorage.clear();
-//     navigate("/login");
-//     toast.success("Logged out successfully");
-//   };
-//   const user = JSON.parse(localStorage.getItem("user"));
-
-//   return (
-//     <>
-//       <nav className="bg-white border-gray-200 dark:bg-gray-900">
-//         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
-//           <a
-//             className="flex items-center space-x-3 rtl:space-x-reverse"
-//           >
-//             <img src="assets/logo/logo.png" className="h-14" alt="Adoption Hub" />
-//           </a>
-//           <div className="flex items-center space-x-6 rtl:space-x-reverse">
-//             <a
-//               href="tel:5541251234"
-//               className="text-sm text-gray-500 dark:text-white hover:underline"
-//             >
-//               Profile here
-//             </a>
-//             <a
-//               href="#"
-//               className="text-sm px-8 py-2 rounded bg-[#FF8534] hover:bg-[#F24E1E] text-white font-medium"
-//             >
-//               Donor
-//             </a>
-//           </div>
-//         </div>
-//       </nav>
-//       <nav className="bg-gray-50 dark:bg-gray-700">
-//         <div className="max-w-screen-xl px-4 py-3 mx-auto">
-//           <div className="flex items-center">
-//             <ul className="flex flex-row mt-0 text-2xl font-semibold space-x-20 rtl:space-x-reverse">
-//               {["Home", "Adopt", "Shop", "Event", "Donate", "Contact", "Story"].map((item, index) => (
-//                 <li key={index}>
-//                   <NavLink
-//                     to={`/${item.toLowerCase()}`}
-//                     className={({ isActive }) =>
-//                       `text-gray-900 dark:text-white hover:underline ${isActive ? "text-blue-800" : ""}`
-//                     }
-//                     style={({ isActive }) => ({
-//                       color: isActive ? '#004AAD' : '',
-//                     })}
-//                   >
-//                     {item}
-//                   </NavLink>
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-//         </div>
-//       </nav>
-//     </>
-//   );
-// }

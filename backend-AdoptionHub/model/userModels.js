@@ -2,14 +2,10 @@ const mongoose = require('mongoose');
 const path = require("path");
 
 const userSchema = mongoose.Schema({
-    firstName :{
+    fullName :{
         type: String,
         required: true,
     }, 
-    lastName:{
-        type: String,
-        required: true,
-    },
     email:{
         type: String,
         required: true,
@@ -21,15 +17,12 @@ const userSchema = mongoose.Schema({
     userImageUrl :{
         type: String,
         default: null,
+        required: false,
         trim: true
     },
     isAdmin: {
         type : Boolean,
         default: false,
-    },
-    token : {
-        type : String,
-        default: '',
     },
     wishlist: {
         type: mongoose.Schema.Types.ObjectId,

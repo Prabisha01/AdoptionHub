@@ -1,6 +1,7 @@
-import { faLocation } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
+import ListThePet from "./user/ListThePet";
 
 // Dummy data for pets
 const pets = [
@@ -87,15 +88,28 @@ const PetCard = ({ pet }) => (
     />
     <div className="p-4">
       <span className="flex flex-row flex-start">
-        <FontAwesomeIcon icon={faLocation} className="text-red-500 text-2xl" />
+        {/* <FontAwesomeIcon icon={faLocationDot} className="text-gray-950 text-2xl" /> */}
         <p className="font-semibold">{pet.location}</p>
       </span>
-      <p className="text-gray-600 text-sm">{pet.type}</p>
+      <span className="flex flex-row flex-start">
+        <p className="font-semibold">{pet.type}</p>
+      </span>
     </div>
   </div>
 );
 
-const AdoptWithToken = () => {
+const Adopt = () => {
+  
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
+
+  const openListModal = () => {
+    setIsListModalOpen(true);
+  };
+
+  const closeListModal = () => {
+    setIsListModalOpen(false);
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen p-5">
       <div className="container mx-auto px-4">
@@ -110,9 +124,13 @@ const AdoptWithToken = () => {
           families.
         </p>
         <div className="flex justify-end">
-          <button className="bg-[#FF8534] hover:bg-[#F24E1E] text-white font-bold py-2 px-4 rounded">
+          <button
+            onClick={openListModal}
+            className="bg-[#FF8534] hover:bg-[#F24E1E] text-white font-bold py-2 px-4 rounded"
+          >
             List the Pet
           </button>
+          <ListThePet isOpen={isListModalOpen} onClose={closeListModal} />
         </div>
         <div className="flex my-8 w-full justify-between items-center">
           <div className="flex-1 w-2/5 mr-2">
@@ -157,16 +175,16 @@ const AdoptWithToken = () => {
           ))}
         </div>
         <div className="flex justify-center mt-8">
-          <div className="flex rounded-md">
+          <div className="flex rounded-md border-2 border-black">
             <a
               href="#"
-              className="py-2 px-4 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+              className="py-2  px-4 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
             >
-              Previous
+              <FontAwesomeIcon icon={faAngleLeft} />
             </a>
             <a
               href="#"
-              className="py-2 px-4 leading-tight text-gray-500 bg-white border-t border-b border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+              className="py-2 px-4 leading-tight text-white bg-[#004AAD] border-r-2 border-l-2 border-black hover:text-gray-700"
             >
               1
             </a>
@@ -174,7 +192,7 @@ const AdoptWithToken = () => {
               href="#"
               className="py-2 px-4 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
             >
-              Next
+              <FontAwesomeIcon icon={faAngleRight} />
             </a>
           </div>
         </div>
@@ -183,4 +201,4 @@ const AdoptWithToken = () => {
   );
 };
 
-export default AdoptWithToken;
+export default Adopt;

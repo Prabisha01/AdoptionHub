@@ -8,7 +8,7 @@ const res = require("express/lib/response");
 const path = require("path");
 const fs = require("fs");
 
-const sendResetPasswordMail = async (firstName, email, token) => {
+const sendResetPasswordMail = async (fullName, email, token) => {
   try {
     const transporter = nodemailer.createTransport({
       // Configure SMTP settings
@@ -30,7 +30,7 @@ const sendResetPasswordMail = async (firstName, email, token) => {
       subject: "Reset the Password",
       html:
         "Hi " +
-        firstName +
+        fullName +
         ', Please copy the link and <a href="http://10.12.1.59:3000/reset_password/' +
         token +
         '">click here</a> to reset your password',
@@ -52,30 +52,20 @@ const createUser = async (req, res) => {
   try {
     // Step 1: Check if data is coming or not
     console.log(req.body);
-    console.log(req.files);
-
     // Step 2: Destructure the data
-    const { firstName, lastName, email, password } = req.body;
-    const { userImage } = req.files;
+    const { fullName, email, password } = req.body;
 
     // Step 3: Validate the incoming data
-    if (!firstName || !lastName || !email || !password) {
-      return res.status(400).json({
+    if (!fullName || !email || !password) {
+      return res.json({
         success: false,
-        message: "Please provide all required fields and an image.",
+        message: "Please provide all required fields",
       });
     }
-
-    // Step 4: Upload image to Cloudinary
-    const uploadedImage = await cloudinary.v2.uploader.upload(userImage.path, {
-      folder: "users",
-      crop: "scale",
-    });
-
     // Step 5: Check existing user
     const existingUser = await Users.findOne({ email: email });
     if (existingUser) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User already exists.",
       });
@@ -87,11 +77,9 @@ const createUser = async (req, res) => {
 
     // Step 7: Create new user
     const newUser = new Users({
-      firstName: firstName,
-      lastName: lastName,
+      fullName: fullName,
       email: email,
       password: encryptedPassword,
-      userImageUrl: uploadedImage.secure_url,
     });
 
     // Step 8: Save user and respond
@@ -110,6 +98,7 @@ const createUser = async (req, res) => {
     });
   }
 };
+
 const loginUser = async (req, res) => {
   // Step 1 : Check if data is coming or not
   console.log(req.body);
@@ -156,7 +145,7 @@ const loginUser = async (req, res) => {
       success: true,
       token: token,
       userData: user,
-      message: "Welcome to NursyEase",
+      message: "Welcome to Adoption Hub",
     });
   } catch (error) {
     console.log(error);
@@ -241,63 +230,56 @@ const updateUser = async (req, res) => {
   console.log(req.files);
 
   // step 2: Destructuring
-  const { firstName, lastName, email} = req.body;
+  const { fullName, email } = req.body;
   const { userImage } = req.files;
 
   // destructure id from URL
   const id = req.params.id;
 
   // step 3: Validating
-  if (!firstName || !lastName || !email ) {
+  if (!fullName || !email) {
     return res.json({
       success: false,
       message: "Please enter all the fields",
     });
   }
-  try{
+  try {
     if (userImage) {
-      let uploadedImage = await cloudinary.v2.uploader.upload(
-        userImage.path,
-        {
-          folder: "users",
-          crop: "scale",
-        }
-      );
+      let uploadedImage = await cloudinary.v2.uploader.upload(userImage.path, {
+        folder: "users",
+        crop: "scale",
+      });
 
-  
-    const updatedUser = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      userImageUrl : uploadedImage.secure_url,
-    
-    };
-    await Users.findByIdAndUpdate(id, updatedUser);
-    res.json({
-      success: true,
-      message: "Updated Successfully",
-      user: updatedUser,
-    });
-  } else {
-    const updatedUser = {
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-    };
-    await Users.findByIdAndUpdate(id, updatedUser);
-    res.json({
-      success: true,
-      message: "Updated Successfully Without Image",
-      user: updatedUser,
+      const updatedUser = {
+        fullName: fullName,
+        email: email,
+        userImageUrl: uploadedImage.secure_url,
+      };
+      await Users.findByIdAndUpdate(id, updatedUser);
+      res.json({
+        success: true,
+        message: "Updated Successfully",
+        user: updatedUser,
+      });
+    } else {
+      const updatedUser = {
+        fullName: fullName,
+        email: email,
+      };
+      await Users.findByIdAndUpdate(id, updatedUser);
+      res.json({
+        success: true,
+        message: "Updated Successfully Without Image",
+        user: updatedUser,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
     });
   }
-} catch (error) {
-  console.log(error);
-  res.status(500).json({
-    success: false,
-    message: "Server Error",
-  });
-}
 };
 
 const changePassword = async (req, res) => {
@@ -389,7 +371,7 @@ const forgetPassword = async (req, res) => {
         { email: req.body.email },
         { $set: { token: randomString } }
       );
-      sendResetPasswordMail(userData.firstName, userData.email, randomString);
+      sendResetPasswordMail(userData.fullName, userData.email, randomString);
       res
         .status(200)
         .send({ success: true, message: "Please check your inbox of mail" });
@@ -406,8 +388,7 @@ const searchUsers = async (req, res) => {
   try {
     const data = await Users.find({
       $or: [
-        { firstName: { $regex: new RegExp(req.params.key, "i") } },
-        { lastName: { $regex: new RegExp(req.params.key, "i") } },
+        { fullName: { $regex: new RegExp(req.params.key, "i") } },
         { email: { $regex: new RegExp(req.params.key, "i") } },
       ],
     });

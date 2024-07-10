@@ -76,7 +76,14 @@ export const getAllBlogsApi = () => Api.get("/api/blog/get_blog");
 
 // Create product API
 export const createProductApi = (data) =>
-  Api.post("/api/product/create_product", data, config);
+  Api.post("/api/product/create", data);
+
+// Create product API
+export const createProductCatApi = (data) =>
+  Api.post("/api/product/create-cat", data);
+
+//get all products
+export const getAllProductCatApi = () => Api.get("/api/product/get-all-cat");
 
 //get all products
 export const getAllProductApi = () => Api.get("/api/product/get_products");
@@ -91,6 +98,10 @@ export const updateProductApi = (id, formData) =>
 
 export const deleteProductApi = (id) =>
   Api.delete(`/api/product/delete_product/${id}`, config);
+
+export const deleteProductCatApi = (id) =>
+  Api.delete(`/api/product/delete-cat/${id}`, config);
+
 
 // Forgot Password API
 export const forgotPasswordApi = (data) =>
@@ -189,13 +200,24 @@ export const createNotificationApi = (data) =>
   Api.post("/api/notification/create_notification", data, config);
 
 //order
-  export const createOrderApi = (data) => Api.post('/api/order/createOrder', data, config)
+export const createOrderApi = (data) =>
+  Api.post("/api/order/createOrder", data, config);
 
 //get order
-  export const getOrder = (id) => Api.get(`/api/order/getOrder/${id}`, config)
+export const getOrder = (id) => Api.get(`/api/order/getOrder/${id}`, config);
 
-  //get all
-  export const getAllOrder = () => Api.get(`/api/order/get_orders`)
+//get all
+export const getAllOrder = () => Api.get(`/api/order/get_orders`);
 
-  //get all notification
-export const getallnotification = () => Api.get("/api/notification/get_notification", config);
+//get all notification
+export const getallnotification = () =>
+  Api.get("/api/notification/get_notification", config);
+
+
+
+// get all aplication
+export const getAllApplication = () => Api.get("/api/application/get_applications");
+
+// Create product API
+export const createApplication = (data) =>
+  Api.post("/api/application/create-application", data);

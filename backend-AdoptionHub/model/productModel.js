@@ -1,51 +1,30 @@
 const mongoose = require("mongoose");
+const {productCategory} = require('./ProductCategoryModel')
 
 const productSchema = new mongoose.Schema({
-  plantName: {
+  productName: {
     type: String,
     required: true,
     trim: true,
   },
-  plantPrice: {
+  productPrice: {
     type: Number,
     required: true,
     trim: true,
   },
-  plantDescription: {
+  productDescription: {
     type: String,
     required: true,
     trim: true,
   },
-  plantId: {
+
+  productCategory: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
-  plantCategory: {
-    type: String,
+    ref: 'productCategory',
     required: true,
     trim: true,
   },
-  plantImageUrl: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  plantImageUrl1: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  plantImageUrl2: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  plantImageUrl3: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  plantImageUrl4: {
+  productImageUrl: {
     type: String,
     required: true,
     trim: true,

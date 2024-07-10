@@ -39,28 +39,7 @@ const OrderHistory = () => {
     }
   });
 
-  // Calculate total quantity and price
-  useEffect(() => {
-    let totalQty = 0;
-    let totalPrice = 0;
-
-    Object.keys(organizedOrders).forEach((orderId) => {
-      totalQty += organizedOrders[orderId].reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
-
-      totalPrice += parseFloat(
-        organizedOrders[orderId].reduce(
-          (total, item) => total + item.quantity * parseFloat(item.plantId.plantPrice),
-          0
-        )
-      );
-    });
-
-    setTotalQuantity(totalQty);
-    setTotalPrice(totalPrice.toFixed(2));
-  }, [organizedOrders]);
+ 
   return (
     <div>
       <>

@@ -4,10 +4,17 @@ const { authGuardAdmin } = require('../middleware/authGuard');
 
 
 // Create product API
-router.post('/create_product', authGuardAdmin, productController.createProduct)
+router.post('/create', productController.createProduct)
+
+
+// Create product API
+router.post('/create-cat', productController.createProductCategory)
 
 //get all products API
 router.get("/get_products", productController.getAllProducts)
+
+
+router.get("/get-all-cat", productController.getAllCat)
 
 
 //Get single product API | /get_product/:id
@@ -18,7 +25,9 @@ router.put("/update_product/:id",authGuardAdmin,  productController.updateProduc
 
 
 //delete product API
-router.delete("/delete_product/:id",authGuardAdmin, productController.deleteProduct)
+router.delete("/delete_product/:id", productController.deleteProduct)
+
+router.delete("/delete-cat/:id", productController.deleteProductCat)
 
 
 //get pagination

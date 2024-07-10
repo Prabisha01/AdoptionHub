@@ -100,7 +100,7 @@ const getAllOrder = async (req, res) => {
     })
     .populate({
       path: 'userId',
-      select: 'firstName lastName',
+      select: 'fullName',
     });
     
 

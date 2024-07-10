@@ -1,10 +1,13 @@
 // import
 const router = require("express").Router();
 const userController = require("../controllers/userController");
+const productController = require("../controllers/productController");
 const { authGuardAdmin, authGuard } = require("../middleware/authGuard");
 
 // creating user api
 router.post("/create", userController.createUser);
+
+router.post("/create-product", productController.createProduct);
 
 // creating login api
 router.post("/login", userController.loginUser);
@@ -16,7 +19,7 @@ router.get("/get_user", userController.getAllUsers);
 router.get("/get_single_user/:id", userController.getSingleUsers);
 
 //update user API
-router.put("/update_user/:id",authGuard, userController.updateUser);
+router.put("/update_user/:id", userController.updateUser);
 
 //get pagination
 router.get("/get_user_pagination", userController.getUserPagination);
