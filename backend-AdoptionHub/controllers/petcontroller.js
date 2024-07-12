@@ -1,7 +1,7 @@
-const Application = require("../model/applicationModel");
+const Pet = require("../model/petModel");
 const cloudinary = require("cloudinary")
 
-const createApplication = async (req, res) => {
+const addPet = async (req, res) => {
   // step 1 : Check incoming data
   console.log(req.body);
   console.log(req.files);
@@ -24,7 +24,7 @@ const createApplication = async (req, res) => {
       if(!fullName|| !email || !number || !address || !petType || !condition || !purpose || !description) {
         return res.json({
           success: false,
-          message: "Please fill all the fields for found pet application",
+          message: "Please fill all the fields for found pet Pet",
         });
       }
 
@@ -66,7 +66,7 @@ const createApplication = async (req, res) => {
       let uploadedImageUrlOne = await cloudinary.v2.uploader.upload(
         petImageUrlOne.path,
         {
-          folder: "Application",
+          folder: "Pet",
           crop: "scale",
         }
       );
@@ -74,7 +74,7 @@ const createApplication = async (req, res) => {
       const uploadedImageUrlTwo = await cloudinary.v2.uploader.upload(
         petImageUrlTwo.path,
         {
-          folder: "Application",
+          folder: "Pet",
           crop: "scale",
         }
       );
@@ -82,7 +82,7 @@ const createApplication = async (req, res) => {
       const uploadedImageUrlThree = await cloudinary.v2.uploader.upload(
         petImageUrlThree.path,
         {
-          folder: "Application",
+          folder: "Pet",
           crop: "scale",
         }
       );
@@ -90,13 +90,13 @@ const createApplication = async (req, res) => {
       const uploadedImageUrlFour = await cloudinary.v2.uploader.upload(
         petImageUrlFour.path,
         {
-          folder: "Application",
+          folder: "Pet",
           crop: "scale",
         }
       );
 
-      // Save the pet application
-      const newPet = new Application({
+      // Save the pet Pet
+      const newPet = new Pet({
         fullName: fullName,
         email: email,
         number: number,
@@ -104,7 +104,9 @@ const createApplication = async (req, res) => {
         petType: petType,
         condition: condition,
         purpose: purpose,
+        status: req.body.status,
         description: description,
+        user : user,
         petImageUrlOne: uploadedImageUrlOne.secure_url,
         petImageUrlTwo: uploadedImageUrlTwo.secure_url,
         petImageUrlThree: uploadedImageUrlThree.secure_url,
@@ -124,9 +126,10 @@ const createApplication = async (req, res) => {
         description,
         petAge,
         petGender,
+        user
       } = req.body;
 
-      if(!fullName|| !email || !number || !address || !petType || !condition || !purpose || !description || !petAge || !petGender)
+      if(!fullName|| !email || !number || !address || !petType || !condition || !purpose || !description || !petAge || !petGender || !user)
       {
         return res.json({
           success: false,
@@ -153,7 +156,7 @@ const createApplication = async (req, res) => {
       let uploadedImageUrlFive = await cloudinary.v2.uploader.upload(
         petImageUrlFive.path,
         {
-          folder: "Application",
+          folder: "Pet",
           crop: "scale",
         }
       );
@@ -161,30 +164,32 @@ const createApplication = async (req, res) => {
       let uploadedFileUrl = await cloudinary.v2.uploader.upload(
         petFileUrl.path,
         {
-          folder: "Application",
+          folder: "Pet",
         }
       );
 
-      // Save the pet application
-      const newPet = new Application({
+      // Save the pet Pet
+      const newPet = new Pet({
         fullName: fullName,
         email: email,
         number: number,
         address: address,
         petType: petType,
         condition: condition,
+        status: req.body.status,
         purpose: purpose,
         description: description,
         petAge: petAge,
         petGender: petGender,
         petImageUrlFive: uploadedImageUrlFive.secure_url,
         petFileUrl: uploadedFileUrl.secure_url,
+        user:user
       });
       await newPet.save();
     }
     res.status(200).json({
       success: true,
-      message: "Pet application created successfully",
+      message: "Pet Pet created successfully",
     });
   } catch (error) {
     console.log(error);
@@ -192,12 +197,12 @@ const createApplication = async (req, res) => {
   }
 };
 
-const getApplications = async (req, res) => {
+const getAllPets = async (req, res) => {
   try {
-    const applications = await Application.find();
+    const Pets = await Pet.find();
     res.status(200).json({
       success: true,
-      data: applications,
+      allPets: Pets,
     });
   } catch (error) {
     console.log(error);
@@ -206,6 +211,6 @@ const getApplications = async (req, res) => {
 };
 
 module.exports = {
-  createApplication,
-  getApplications,
+  addPet,
+  getAllPets,
 };

@@ -50,33 +50,32 @@ export const getAllUserApi = () => Api.get("/api/user/get_user");
 export const getSingleUserApi = (id) =>
   Api.get(`/api/user/get_single_user/${id}`);
 
-// create blog api
-export const createBlogApi = (data) =>
-  Api.post("/api/blog/create_blog", data, config);
+// create event api
+export const createEventApi = (data) =>
+  Api.post("/api/event/create_event", data, config);
 
 //delete product API
 export const deleteUserApi = (id) =>
   Api.delete(`/api/user/delete_user/${id}`, config);
 
-//get single blog API
-export const getSingleBlogApi = (id) => Api.get(`/api/blog/get_blog/${id}`);
+//get single event API
+export const getSingleEventApi = (id) => Api.get(`/api/event/get_event/${id}`);
 
-// create blog api
-export const deleteBlogApi = (id) =>
-  Api.delete(`/api/blog/delete_blog/${id}`, config);
-//update blog API with ID
-export const updateBlogApi = (id, formData) =>
-  Api.put(`/api/blog/update_product/${id}`, formData, config);
+// create event api
+export const deleteEventApi = (id) =>
+  Api.delete(`/api/event/delete_event/${id}`, config);
+//update event API with ID
+export const updateEventApi = (id, formData) =>
+  Api.put(`/api/event/update_product/${id}`, formData, config);
 
 //update user API with ID
 export const updateUserApi = (id, formData) =>
   Api.put(`/api/user/update_user/${id}`, formData, config);
 //get all user
-export const getAllBlogsApi = () => Api.get("/api/blog/get_blog");
+export const getAllEventsApi = () => Api.get("/api/event/get_event");
 
 // Create product API
-export const createProductApi = (data) =>
-  Api.post("/api/product/create", data);
+export const createProductApi = (data) => Api.post("/api/product/create", data);
 
 // Create product API
 export const createProductCatApi = (data) =>
@@ -102,7 +101,6 @@ export const deleteProductApi = (id) =>
 export const deleteProductCatApi = (id) =>
   Api.delete(`/api/product/delete-cat/${id}`, config);
 
-
 // Forgot Password API
 export const forgotPasswordApi = (data) =>
   Api.post(`/api/user/forget_password`, data);
@@ -116,9 +114,9 @@ export const resetPasswordApi = (token, data) =>
 export const changePasswordApi = (id, data) =>
   Api.put(`/api/user/change_password/${id}`, data, config);
 
-//blog pagination
-export const getBlogPaginationApi = (page) =>
-  Api.get(`/api/blog/get_blog_pagination?page=${page}`, config);
+//event pagination
+export const getEventPaginationApi = (page) =>
+  Api.get(`/api/event/get_event_pagination?page=${page}`, config);
 
 //product pagination
 export const getProductPaginationApi = (page) =>
@@ -128,9 +126,9 @@ export const getProductPaginationApi = (page) =>
 export const getUserProductPaginationApi = (page) =>
   Api.get(`/api/product/get_user_product_pagination?page=${page}`, config);
 
-//blog user pagination
-export const getUserBlogPaginationApi = (page) =>
-  Api.get(`/api/blog/get_user_blog_pagination?page=${page}`, config);
+//event user pagination
+export const getUserEventPaginationApi = (page) =>
+  Api.get(`/api/event/get_user_event_pagination?page=${page}`, config);
 
 //user pagination
 export const getUserPaginationApi = (page) =>
@@ -148,9 +146,9 @@ export const searchContactsApi = (searchQuery) =>
 export const searchUsersApi = (searchQuery) =>
   Api.get(`/api/user/search/${searchQuery}`, config);
 
-//search blog
-export const searchBlogsApi = (searchQuery) =>
-  Api.get(`/api/blog/search/${searchQuery}`, config);
+//search event
+export const searchEventsApi = (searchQuery) =>
+  Api.get(`/api/event/search/${searchQuery}`, config);
 
 //search search
 export const searchProductsApi = (searchQuery) =>
@@ -189,8 +187,8 @@ export const getUserCountApi = () => Api.get("/api/user/users/count");
 //Contact count
 export const getContactCountApi = () => Api.get("/api/contact/contacts/count");
 
-//blog count
-export const getBlogCountApi = () => Api.get("/api/blog/blogs/count");
+//event count
+export const getEventCountApi = () => Api.get("/api/event/events/count");
 
 //product count
 export const getProductsCountApi = () => Api.get("/api/product/products/count");
@@ -213,11 +211,9 @@ export const getAllOrder = () => Api.get(`/api/order/get_orders`);
 export const getallnotification = () =>
   Api.get("/api/notification/get_notification", config);
 
-
-
 // get all aplication
-export const getAllApplication = () => Api.get("/api/application/get_applications");
+export const getAllPetsApi = () => Api.get("/api/pet/get-all-pets");
 
 // Create product API
-export const createApplication = (data) =>
-  Api.post("/api/application/create-application", data);
+export const addpetApi = (data) =>
+  Api.post("/api/pet/add-pet", data);

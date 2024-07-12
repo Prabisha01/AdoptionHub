@@ -18,7 +18,7 @@ import { faCartArrowDown, faRightFromBracket, faShop, faUser } from "@fortawesom
 const navigation = [
   { name: "Adopt", href: "/adopt", current: false },
   { name: "Shop", href: "/products", current: false },
-  { name: "Event", href: "/donation-form", current: false },
+  { name: "Event", href: "/event", current: false },
 ];
 
 function classNames(...classes) {

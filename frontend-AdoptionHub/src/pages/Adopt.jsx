@@ -1,106 +1,58 @@
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getAllPetsApi } from "../apis/Api";
 import ListThePet from "./user/ListThePet";
+import PetModal from "./PetModal";
 
-// Dummy data for pets
-const pets = [
-  {
-    id: 1,
-    location: "Bonju",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 2,
-    location: "Bilbozar",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 3,
-    location: "Bonju",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 4,
-    location: "Bilbozar",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 5,
-    location: "Bonju",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 6,
-    location: "Bilbozar",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 7,
-    location: "Bonju",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 8,
-    location: "Bilbozar",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 9,
-    location: "Bonju",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 10,
-    location: "Bilbozar",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 11,
-    location: "Bonju",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-  {
-    id: 12,
-    location: "Bilbozar",
-    imageUrl: "https://www.cdc.gov/healthypets/images/slider/dog-and-cat.jpg",
-    type: "Katt",
-  },
-];
-
-const PetCard = ({ pet }) => (
-  <div className="border rounded overflow-hidden shadow-lg">
+const PetCard = ({ pet, openPetModal }) => (
+  <Link
+    className="border rounded-lg overflow-hidden shadow-lg"
+    onClick={(e) => {
+      e.preventDefault(); 
+      openPetModal(pet);
+    }}
+  >
     <img
-      src={pet.imageUrl}
-      alt={`${pet.location}`}
-      className="w-full h-48 object-cover"
+      src={
+        pet.petImageUrlOne ??
+        pet.petImageUrlTwo ??
+        pet.petImageUrlThree ??
+        pet.petImageUrlFour ??
+        pet.petImageUrlFive
+      }
+      alt={`${pet.address}`}
+      className="w-full h-48 object-cover rounded-lg"
     />
-    <div className="p-4">
+    <div className="px-4 py-3">
       <span className="flex flex-row flex-start">
         {/* <FontAwesomeIcon icon={faLocationDot} className="text-gray-950 text-2xl" /> */}
-        <p className="font-semibold">{pet.location}</p>
+        <p className="font-semibold">{pet.address}</p>
       </span>
       <span className="flex flex-row flex-start">
-        <p className="font-semibold">{pet.type}</p>
+        <p className="font-semibold">{pet.petType ?? pet.email}</p>
       </span>
     </div>
-  </div>
+  </Link>
 );
 
 const Adopt = () => {
-  
+
+  const [isPetModalOpen, setIsPetModalOpen] = useState(false);
   const [isListModalOpen, setIsListModalOpen] = useState(false);
+  const [selectedPet, setSelectedPet] = useState(null);
+  const [pets, setPets] = useState([]);
+
+  const openPetModal = (pet) => {
+    console.log(pet)
+    setSelectedPet(pet);
+    setIsPetModalOpen(true);
+  };
+
+  const closePetModal = () => {
+    setIsPetModalOpen(false);
+  };
 
   const openListModal = () => {
     setIsListModalOpen(true);
@@ -109,6 +61,16 @@ const Adopt = () => {
   const closeListModal = () => {
     setIsListModalOpen(false);
   };
+
+  const fetchAllPets = async () => {
+    getAllPetsApi().then((response) => {
+      setPets(response.data.allPets);
+    });
+  };
+
+  useEffect(() => {
+    fetchAllPets();
+  }, [pets.length]);
 
   return (
     <div className="bg-gray-50 min-h-screen p-5">
@@ -143,36 +105,27 @@ const Adopt = () => {
           <div className="flex w-3/5">
             <select className="border rounded w-1/4 py-2 px-4 mr-2">
               <option>Location</option>
-              <option>Location</option>
-              <option>Location</option>
-              <option>Location</option>
             </select>
             <select className="border rounded w-1/4 py-2 px-4 mr-2">
-              <option>Type</option>
-              <option>Type</option>
-              <option>Type</option>
               <option>Type</option>
             </select>
             <select className="border rounded w-1/4 py-2 px-4 mr-2">
               <option>Age</option>
-              <option>Age</option>
-              <option>Age</option>
-              <option>Age</option>
             </select>
             <select className="border rounded w-1/4 py-2 px-4 mr-2">
               <option>Gender</option>
-              <option>Gender</option>
-              <option>Gender</option>
-              <option>Gender</option>
+              <option>Male</option>
+              <option>Female</option>
             </select>
           </div>
         </div>
       </div>
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {pets.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />
+            <PetCard key={pet.id} pet={pet} openPetModal={()=> openPetModal(pet)} />
           ))}
+          <PetModal isOpen={isPetModalOpen} onClose={closePetModal} pet={selectedPet} />
         </div>
         <div className="flex justify-center mt-8">
           <div className="flex rounded-md border-2 border-black">

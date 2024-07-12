@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { createUserApi } from "../apis/Api";
 
 const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
+  
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [fullName, setFullName] = useState("");

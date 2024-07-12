@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const applicationSchema = new mongoose.Schema(
+const petSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -73,7 +73,7 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    userId: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
       required: false,
@@ -84,6 +84,6 @@ const applicationSchema = new mongoose.Schema(
   }
 );
 
-const Application = mongoose.model("application", applicationSchema);
+const Pet = mongoose.model("pet", petSchema);
 
-module.exports = Application;
+module.exports = Pet;

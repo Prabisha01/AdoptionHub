@@ -14,6 +14,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Products from "./pages/Products";
 import TermsAndConditions from "./pages/Terms";
 import Profile from "./pages/user/Profile";
+import AllEvents from "./pages/AllEvents";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -30,6 +31,7 @@ function App() {
         <Route path="/faq" element={<Faq />} />
         <Route path="/terms-and-condition" element={<TermsAndConditions />} />
         <Route path="/about" element={<About />} />
+        <Route path="/event" element={<AllEvents />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/adopt" element={<Adopt />} />
         <Route path="/products" element={<Products />} />

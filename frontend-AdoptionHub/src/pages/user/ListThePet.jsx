@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createApplication } from "../../apis/Api";
+import { addpetApi } from "../../apis/Api";
 
-const ListThePet = ({isOpen, onClose }) => {
+const ListThePet = ({ isOpen, onClose }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [ownership, setOwnership] = useState("found");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,9 +33,9 @@ const ListThePet = ({isOpen, onClose }) => {
   const [previewImageFive, setPreviewImageFive] = useState("");
 
   const handleCloseClick = (e) => {
-    e.stopPropagation(); // Stop the event from propagating further
+    e.stopPropagation(); 
     console.log("close");
-    onClose(); // Close the modal
+    onClose();
   };
 
   // functio for image upload
@@ -67,7 +68,7 @@ const ListThePet = ({isOpen, onClose }) => {
     setPetImageUrlFive(file);
     setPreviewImageFive(URL?.createObjectURL(file));
   };
-  
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -92,12 +93,15 @@ const ListThePet = ({isOpen, onClose }) => {
     formData.append("petImageUrlThree", petImageUrlThree);
     formData.append("petImageUrlFour", petImageUrlFour);
     formData.append("status", "found");
-    createApplication(formData)
+    formData.append("user", user._id);
+    addpetApi(formData)
       .then((res) => {
         console.log(res);
         if (res.data.success === false) {
           toast.error(res.data.message);
         } else {
+          
+          onClose();
           toast.success(res.data.message);
         }
       })
@@ -127,19 +131,17 @@ const ListThePet = ({isOpen, onClose }) => {
     formData.append("description", description);
     formData.append("petImageUrlFive", petImageUrlFive);
     formData.append("petFileUrl", petFileUrl);
+    formData.append("user", user._id);
 
     formData.append("status", "own");
-
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-
-    createApplication(formData)
+    
+    addpetApi(formData)
       .then((res) => {
         console.log(res);
         if (res.data.success === false) {
           toast.error(res.data.message);
         } else {
+          onClose();
           toast.success(res.data.message);
         }
       })
@@ -157,7 +159,6 @@ const ListThePet = ({isOpen, onClose }) => {
   };
 
   if (!isOpen) return null;
-
 
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4 overflow-y-scroll">
@@ -306,19 +307,20 @@ const ListThePet = ({isOpen, onClose }) => {
                 <div className="flex flex-row gap-16">
                   {previewImageOne && (
                     <div className="mt-4">
-                      <img src={previewImageOne} className="w-36 rounded-md" />
+                      <img src={previewImageOne} alt="" className="w-36 rounded-md" />
                     </div>
                   )}
 
                   {previewImageTwo && (
                     <div className="mt-4">
-                      <img src={previewImageTwo} className="w-36 rounded-md" />
+                      <img src={previewImageTwo} alt="" className="w-36 rounded-md" />
                     </div>
                   )}
 
                   {previewImageThree && (
                     <div className="mt-4">
                       <img
+                      alt=""
                         src={previewImageThree}
                         className="w-36 rounded-md"
                       />
@@ -327,14 +329,14 @@ const ListThePet = ({isOpen, onClose }) => {
 
                   {previewImageFour && (
                     <div className="mt-4">
-                      <img src={previewImageFour} className="w-36 rounded-md" />
+                      <img alt="" src={previewImageFour} className="w-36 rounded-md" />
                     </div>
                   )}
                 </div>
               </>
             </div>
             <button
-            type="submit"
+              type="submit"
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               {isLoading ? "Loading..." : "Submit"}
@@ -426,10 +428,10 @@ const ListThePet = ({isOpen, onClose }) => {
                   />
                 </label>
                 {previewImageFive && (
-                <div className="mt-4">
-                  <img src={previewImageFive} className="w-36 rounded-md" />
-                </div>
-              )}
+                  <div className="mt-4">
+                    <img src={previewImageFive} alt="" className="w-36 rounded-md" />
+                  </div>
+                )}
                 <label className="block">
                   <span className="sr-only">Choose File:</span>
                   <input
@@ -446,10 +448,9 @@ const ListThePet = ({isOpen, onClose }) => {
                   />
                 </label>
               </div>
-
             </div>
             <button
-            type="submit"
+              type="submit"
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             >
               {isLoading ? "Loading..." : "Submit"}
