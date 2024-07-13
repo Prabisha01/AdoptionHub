@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const Footers = () => {
   return (
     <footer className="bg-[#004AAD] text-white pt-10">
       <div className="mx-5 flex justify-between items-center">
@@ -51,4 +51,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footers;

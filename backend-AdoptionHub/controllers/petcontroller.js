@@ -19,12 +19,13 @@ const addPet = async (req, res) => {
         condition,
         purpose,
         description,
+        user
       } = req.body;
 
       if(!fullName|| !email || !number || !address || !petType || !condition || !purpose || !description) {
         return res.json({
           success: false,
-          message: "Please fill all the fields for found pet Pet",
+          message: "Please fill all the fields",
         });
       }
 

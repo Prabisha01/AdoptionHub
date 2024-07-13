@@ -1,5 +1,6 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -33,7 +34,7 @@ const ListThePet = ({ isOpen, onClose }) => {
   const [previewImageFive, setPreviewImageFive] = useState("");
 
   const handleCloseClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     console.log("close");
     onClose();
   };
@@ -100,7 +101,6 @@ const ListThePet = ({ isOpen, onClose }) => {
         if (res.data.success === false) {
           toast.error(res.data.message);
         } else {
-          
           onClose();
           toast.success(res.data.message);
         }
@@ -134,7 +134,7 @@ const ListThePet = ({ isOpen, onClose }) => {
     formData.append("user", user._id);
 
     formData.append("status", "own");
-    
+
     addpetApi(formData)
       .then((res) => {
         console.log(res);
@@ -307,20 +307,28 @@ const ListThePet = ({ isOpen, onClose }) => {
                 <div className="flex flex-row gap-16">
                   {previewImageOne && (
                     <div className="mt-4">
-                      <img src={previewImageOne} alt="" className="w-36 rounded-md" />
+                      <img
+                        src={previewImageOne}
+                        alt=""
+                        className="w-36 rounded-md"
+                      />
                     </div>
                   )}
 
                   {previewImageTwo && (
                     <div className="mt-4">
-                      <img src={previewImageTwo} alt="" className="w-36 rounded-md" />
+                      <img
+                        src={previewImageTwo}
+                        alt=""
+                        className="w-36 rounded-md"
+                      />
                     </div>
                   )}
 
                   {previewImageThree && (
                     <div className="mt-4">
                       <img
-                      alt=""
+                        alt=""
                         src={previewImageThree}
                         className="w-36 rounded-md"
                       />
@@ -329,18 +337,28 @@ const ListThePet = ({ isOpen, onClose }) => {
 
                   {previewImageFour && (
                     <div className="mt-4">
-                      <img alt="" src={previewImageFour} className="w-36 rounded-md" />
+                      <img
+                        alt=""
+                        src={previewImageFour}
+                        className="w-36 rounded-md"
+                      />
                     </div>
                   )}
                 </div>
               </>
             </div>
-            <button
-              type="submit"
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              {isLoading ? "Loading..." : "Submit"}
-            </button>
+            <div className="w-full flex flex-row justify-between">
+              <button
+                type="submit"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-24 rounded"
+              >
+                {isLoading ? (
+                  <CircularProgress color={"inherit"} size={20} />
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
           </form>
         ) : (
           <form onSubmit={handleOwnSubmit}>
@@ -429,7 +447,11 @@ const ListThePet = ({ isOpen, onClose }) => {
                 </label>
                 {previewImageFive && (
                   <div className="mt-4">
-                    <img src={previewImageFive} alt="" className="w-36 rounded-md" />
+                    <img
+                      src={previewImageFive}
+                      alt=""
+                      className="w-36 rounded-md"
+                    />
                   </div>
                 )}
                 <label className="block">
@@ -449,12 +471,18 @@ const ListThePet = ({ isOpen, onClose }) => {
                 </label>
               </div>
             </div>
-            <button
-              type="submit"
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              {isLoading ? "Loading..." : "Submit"}
-            </button>
+            <div className="w-full flex flex-row justify-center">
+              <button
+                type="submit"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-24 rounded"
+              >
+                {isLoading ? (
+                  <CircularProgress color={"inherit"} size={20} />
+                ) : (
+                  "Submit"
+                )}
+              </button>
+            </div>
           </form>
         )}
       </div>

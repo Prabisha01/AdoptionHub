@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllProductApi, getAllProductCatApi } from "../apis/Api";
+import { toast } from "react-toastify";
+import {
+  addToCartApi,
+  getAllProductApi,
+  getAllProductCatApi,
+} from "../apis/Api";
 
 const Products = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [products, setProducts] = useState([]);
   const [prodCat, setProdCat] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,10 +28,29 @@ const Products = () => {
         setLoading(false);
       });
   };
-
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const addToCart = (id) => {
+    console.log(id);
+    const data = new FormData();
+    data.append("products", id);
+    data.append("user", user._id);
+    data.append("quantity", 1);
+
+    addToCartApi(data)
+      .then((res) => {
+        if (res.data.success) {
+          toast.success(res.data.message);
+        } else {
+          toast.error(res.data.message);
+        }
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -93,7 +118,10 @@ const Products = () => {
               className="h-52 w-full object-cover mb-3"
             />
             <div className="absolute right-0 flex flex-row justify-end p-1">
-              <button className="bg-[#FF8534] hover:bg-[#F24E1E] border-2 border-black text-white font-bold py-2 px-4 rounded">
+              <button
+                onClick={() => addToCart(product._id)}
+                className="bg-[#FF8534] hover:bg-[#F24E1E] border-2 border-black text-white font-bold py-2 px-4 rounded"
+              >
                 Add to Cart
               </button>
             </div>

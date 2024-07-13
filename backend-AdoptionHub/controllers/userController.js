@@ -7,6 +7,8 @@ const randomstring = require("randomstring");
 const res = require("express/lib/response");
 const path = require("path");
 const fs = require("fs");
+const { sendEmailController } = require("./sendEmailController");
+const { Console } = require("console");
 
 const sendResetPasswordMail = async (fullName, email, token) => {
   try {
@@ -225,19 +227,18 @@ const getSingleUsers = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  // step 1: Check incoming data
   console.log(req.body);
   console.log(req.files);
 
   // step 2: Destructuring
-  const { fullName, email } = req.body;
+  const { fullName, email,address } = req.body;
   const { userImage } = req.files;
 
   // destructure id from URL
   const id = req.params.id;
 
   // step 3: Validating
-  if (!fullName || !email) {
+  if (!fullName || !email || !address) {
     return res.json({
       success: false,
       message: "Please enter all the fields",
@@ -265,6 +266,7 @@ const updateUser = async (req, res) => {
       const updatedUser = {
         fullName: fullName,
         email: email,
+        address: address,
       };
       await Users.findByIdAndUpdate(id, updatedUser);
       res.json({
@@ -448,6 +450,53 @@ const getUserCount = async (req, res) => {
     });
   }
 };
+const sendOtp = async (req, res) => {
+  const { email } = req.body;
+  const user = await Users.findOne({ email: email });
+  const randomOtp = Math.floor(100000 + Math.random() * 900000);
+  console.log(randomOtp);
+  if (user) {
+    await sendEmailController(
+      email,
+      "Adoption Hub",
+      `Your Otp is: ${randomOtp}`
+    ).then(async (success) => {
+      if (success) {
+        res.status(200).json({
+          success: true,
+          message: "Otp sent successfully",
+          otp: randomOtp,
+        });
+      }
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "User not found",
+    });
+  }
+};
+
+const verifyUser = async (req, res) => {
+  console.log(req.body);
+  const { email } = req.body;
+  const user = await Users.findOne({ email: email });
+  if (user) {
+    const verifyUser = await Users.updateOne(
+      { email: email },
+      { $set: { isVerified: true } }
+    );
+    res.json({
+      success: true,
+      message: "User verified successfully",
+    });
+  } else {
+    res.json({
+      success: false,
+      message: "User not found",
+    });
+  }
+};
 
 module.exports = {
   createUser,
@@ -462,4 +511,6 @@ module.exports = {
   getUserCount,
   changePassword,
   searchUsers,
+  sendOtp,
+  verifyUser,
 };

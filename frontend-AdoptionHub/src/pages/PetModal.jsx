@@ -1,16 +1,31 @@
-import React from "react";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import VerifyPage from "./VerifyPage";
 
 const PetModal = ({ isOpen, onClose, pet }) => {
-  if (!isOpen || !pet) return null;
+  const [isAdoptModalOpen, setIsAdoptModalOpen] = useState(false);
 
+  const openAdoptModal = () => {
+    setIsAdoptModalOpen(true);
+  };
+
+  const closeAdoptModal = () => {
+    setIsAdoptModalOpen(false);
+  };
+
+  if (!isOpen || !pet) return null;
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white w-3/4 max-w-4xl rounded-lg shadow-xl">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h2 className="text-2xl font-bold">CAT</h2>
-          <button onClick={onClose} className="text-xl font-semibold">
-            X
+        <div className="flex flex-row justify-end">
+          <button
+            title="Close Modal"
+            onClick={onClose}
+            className="text-white bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2 px-4"
+          >
+            <FontAwesomeIcon icon={faTimes} />
           </button>
         </div>
         <div className="flex">
@@ -82,7 +97,18 @@ const PetModal = ({ isOpen, onClose, pet }) => {
               <p>{pet.description}</p>
             </div>
             <div className="flex w-full flex-row pt-5">
-              <Link className="w-full border-2 border-black text-center bg-[#FF8534] hover:bg-[#F24E1E] text-white font-bold py-2 px-4 rounded">Adopt Now</Link>
+              <Link
+                onClick={(e) => {
+                  e.preventDefault();
+                  openAdoptModal();
+                }}
+                className="w-full border-1 border-black text-center bg-[#FF8534] hover:bg-[#F24E1E] text-white font-bold py-2 px-4 rounded"
+              >
+                Adopt
+              </Link>
+              {isAdoptModalOpen && (
+                <VerifyPage isOpen={isAdoptModalOpen} pet={pet} close={closeAdoptModal} />
+              )}
             </div>
           </div>
         </div>

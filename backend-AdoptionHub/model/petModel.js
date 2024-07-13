@@ -18,9 +18,9 @@ const petSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    petype: {
+    petType: {
       type: String,
-      required: false,
+      required: true,
     },
     petAge: {
       type: String,
@@ -80,7 +80,7 @@ const petSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
   }
 );
 

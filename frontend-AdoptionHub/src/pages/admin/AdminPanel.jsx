@@ -2,7 +2,7 @@ import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomFaIcons from "../../components/CustomFaIcons";
-import "../style/AdminPanel.css";
+import "../../style/AdminPanel.css";
 import AdminDashBoard from "./admin_dashboard/AdminDashboard";
 import Adopt from "./AdoptManagement";
 import Contact from "./Contact";
@@ -35,9 +35,6 @@ function AdminPanel() {
 
   let content;
   switch (currentPage) {
-    case "DashBoard":
-      content = <AdminDashBoard />;
-      break;
     case "Product":
       content = <ProductManagement />;
       break;
@@ -87,16 +84,6 @@ function AdminPanel() {
         <div className="adminWrapper">
           <ul className="adminUl z-50">
             <li
-              className={`adminLi ${
-                currentPage === "Dashboard" ? "active" : ""
-              }`}
-            >
-              <button onClick={() => setCurrentPage("Dashboard")} tabIndex="1">
-                Dashboard
-              </button>
-            </li>
-
-            <li
               className={`adminLi ${currentPage === "Product" ? "active" : ""}`}
             >
               <button onClick={() => setCurrentPage("Product")} tabIndex="2">
@@ -128,7 +115,7 @@ function AdminPanel() {
               className={`adminLi ${currentPage === "Adopt" ? "active" : ""}`}
             >
               <button onClick={() => setCurrentPage("Adopt")} tabIndex="4">
-                Adopt
+                Adoption Management
               </button>
             </li>
             <li
@@ -160,7 +147,7 @@ function AdminPanel() {
               </button>
             </li>
           </ul>
-          <main>
+          <main className="mt-4">
             {content}
             {isLogoutModalOpen && (
               <div

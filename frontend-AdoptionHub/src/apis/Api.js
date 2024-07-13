@@ -16,7 +16,6 @@ const config = {
 };
 
 export const testApi = () => Api.get("/test");
-// http://localhost:5000/test
 
 // create user api
 export const createUserApi = (data) =>
@@ -49,6 +48,10 @@ export const getAllUserApi = () => Api.get("/api/user/get_user");
 //get single contact API
 export const getSingleUserApi = (id) =>
   Api.get(`/api/user/get_single_user/${id}`);
+
+export const sendOtpApi = (data) => Api.post("/api/user/send_otp", data);
+
+export const verifyUserApi = (data) => Api.post("/api/user/verify_user", data);
 
 // create event api
 export const createEventApi = (data) =>
@@ -174,7 +177,7 @@ export const addToCartApi = (data) =>
 export const getAllCartApi = (id) => Api.get(`/api/addtocart/get_carts/${id}`);
 
 //remove cart
-export const removeCart = (id) =>
+export const removeCartApi = (id) =>
   Api.delete(`/api/addtocart/delete_cart/${id}`);
 
 //updatecart
@@ -217,3 +220,13 @@ export const getAllPetsApi = () => Api.get("/api/pet/get-all-pets");
 // Create product API
 export const addpetApi = (data) =>
   Api.post("/api/pet/add-pet", data);
+
+// adoptions api 
+export const adoptAPetApi = (data) =>
+  Api.post("/api/adopt/adopt", data);
+
+export const getAllAdoptionReqApi = () => Api.get("/api/adopt/get-all-adoptions");
+
+export const deleteAdoptionApi = (id) => Api.delete(`/api/adopt/delete-adoption/${id}`);
+
+export const getMyAdoptionReqApi = (id) => Api.get(`/api/adopt/get-my-adoption/${id}`);
