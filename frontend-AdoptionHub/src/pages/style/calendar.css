@@ -1,16 +1,35 @@
-.fc-toolbar-title {
-    @apply text-lg font-semibold !important;
-  }
-  
-  .fc-button {
-    @apply border rounded px-2 py-1 !important;
-  }
-  
-  .fc-button-primary {
-    @apply bg-blue-500 text-white !important;
-  }
-  
-  .fc-button-primary:not(:disabled):hover {
-    @apply bg-blue-600 !important;
-  }
-  
+/* Add this CSS to your calendar.css file */
+
+.fc .fc-toolbar.fc-header-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.fc .fc-button {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+  margin: 0 5px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.fc .fc-button:hover {
+  background-color: #eee;
+}
+
+.fc .fc-button-primary {
+  background-color: #000;
+  color: #fff;
+}
+
+.fc .fc-button-primary:hover {
+  background-color: #444;
+}

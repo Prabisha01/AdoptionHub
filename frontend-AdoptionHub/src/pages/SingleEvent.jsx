@@ -7,7 +7,7 @@ const EventDetailsModal = ({ event, isOpen, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+      className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-sm"
       id="my-modal"
     >
       <div className="relative bg-white rounded-lg shadow-lg w-full max-w-3xl mx-4 p-6">

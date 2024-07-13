@@ -98,8 +98,8 @@ const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg shadow-lg flex">
+    <div className="fixed inset-0 flex items-center justify-center z-10 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-lg flex border border-black">
         <div className="w-1/2">
           <img
             src="assets/images/login.png"
@@ -136,10 +136,7 @@ const RegisterModal = ({ isOpen, onClose, onOpenLogin }) => {
             <div className="mb-4">
               <div className="relative">
                 <span className="absolute bottom-3 flex items-center pl-3">
-                  <FontAwesomeIcon
-                    icon={faEnvelope}
-                    className="text-gray-950"
-                  />
+                  <FontAwesomeIcon icon={faEnvelope} className="text-gray-950" />
                 </span>
                 <input
                   placeholder="Email Address"

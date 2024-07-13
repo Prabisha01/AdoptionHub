@@ -54,7 +54,8 @@ app.get('/test',(req,res)=>{
 app.use('/api/user', require('./routes/userRoutes'))
 app.use('/api/product', require('./routes/productRoute'))
 app.use('/api/order', require('./routes/orderRoute'))
-app.use('/api/application', require('./routes/appplicationRoute'))
+app.use('/api/pet', require('./routes/petRoute'))
+app.use('/api/event', require('./routes/eventRoute'))
 // our actual routes
 // http://localhost:5000/api/user/create
 // http://localhost:5000/api/user/login

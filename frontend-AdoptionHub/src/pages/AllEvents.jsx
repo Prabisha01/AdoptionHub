@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { getAllEventsApi } from '../apis/Api';
-import './style/calendar.css';
 import EventDetailsModal from './SingleEvent';
+import './style/calendar.css';
 
 const AllEvents = () => {
+  const calendarRef = useRef(null);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,32 +56,62 @@ const AllEvents = () => {
     );
   };
 
+  const handlePrevClick = () => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.prev();
+  };
+
+  const handleNextClick = () => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.next();
+  };
+
+  const handleTodayClick = () => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.today();
+  };
+
   return (
-    <div className="h-screen w-screen flex flex-col">
+    <div className="h-screen w-screen flex flex-col" style={{ paddingTop: '150px', paddingLeft: '120px', paddingRight: '120px' }}> {/* Adjusted padding */}
       <FullCalendar
+        ref={calendarRef}
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={events}
         eventClick={handleEventClick}
         height="100%"
-        eventContent={renderEventContent} 
+        eventContent={renderEventContent}
+        customButtons={{
+          myPrev: {
+            text: 'Back',
+            click: handlePrevClick
+          },
+          myNext: {
+            text: 'Next',
+            click: handleNextClick
+          },
+          myToday: {
+            text: 'Today',
+            click: handleTodayClick
+          }
+        }}
         headerToolbar={{
-          left: 'prev,next today',
+          left: 'myToday,myPrev,myNext',
           center: 'title',
           right: 'dayGridMonth,dayGridWeek,dayGridDay'
         }}
-        titleFormat={{ year: 'numeric', month: 'long' }} 
+        titleFormat={{ year: 'numeric', month: 'long' }}
         buttonText={{
-          today: 'Today',
           month: 'Month',
           week: 'Week',
           day: 'Day'
         }}
+        buttonIcons={false}
       />
-      <EventDetailsModal 
-        event={selectedEvent} 
-        isOpen={isModalOpen} 
-        onClose={closeModal} 
+      <EventDetailsModal
+        event={selectedEvent}
+        isOpen={isModalOpen}
+        onClose={closeModal}
       />
     </div>
   );
