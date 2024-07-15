@@ -8,7 +8,7 @@ import { createEventApi, getAllEventsApi } from "../../apis/Api";
 export default function EventManagement() {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const [events, setEventss] = useState([]);
+  const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventTitle, setEventTitle] = useState("");
@@ -20,6 +20,10 @@ export default function EventManagement() {
   const [previewTwo, setPreviewTwo] = useState(null);
   const [eventImageTwoUrl, setEventImageTwoUrl] = useState("");
   const [eventFileUrl, setEventFileUrl] = useState("");
+
+  const [filterTitle, setFilterTitle] = useState("");
+  const [filterOrganizedBy, setFilterOrganizedBy] = useState("");
+  const [filterDate, setFilterDate] = useState("");
 
   const changeEventTitle = (e) => {
     setEventTitle(e.target.value);
@@ -89,9 +93,9 @@ export default function EventManagement() {
   const fetchEvents = async () => {
     try {
       const response = await getAllEventsApi();
-      setEventss(response.data.events);
+      setEvents(response.data.events);
     } catch (error) {
-      console.error("Error Fetching Organizations", error);
+      console.error("Error Fetching Events", error);
     }
   };
 
@@ -114,12 +118,22 @@ export default function EventManagement() {
     );
   };
 
+  const filterEvents = () => {
+    return events.filter((event) => {
+      return (
+        (filterTitle === "" || event.eventTitle.toLowerCase().includes(filterTitle.toLowerCase())) &&
+        (filterOrganizedBy === "" || event.organizedBy.toLowerCase().includes(filterOrganizedBy.toLowerCase())) &&
+        (filterDate === "" || formatDate(event.eventDate).includes(filterDate))
+      );
+    });
+  };
+
   return (
     <>
       <div className="w-full sm:px-6">
         <div className="px-4 md:px-10 py-2 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
           <div className="sm:flex flex-row items-center justify-between">
-            <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
+            <p className="inline-flex sm:ml-3 sm:mt-0 items-start justify-start px-6 py-3 text-black focus:outline-none rounded">
               Events
             </p>
             <div>
@@ -133,12 +147,40 @@ export default function EventManagement() {
           </div>
         </div>
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5 overflow-y-auto">
+          <div className="flex flex-col items-center justify-center md:flex-row md:items-start md:justify-between md:gap-4 mb-4 w-full">
+            <div className="flex w-100 my-4 gap-2">
+              <input
+                className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5"
+                type="text"
+                name="filterTitle"
+                placeholder="Filter by Event Title"
+                value={filterTitle}
+                onChange={(e) => setFilterTitle(e.target.value)}
+              />
+              <input
+                className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5"
+                type="text"
+                name="filterOrganizedBy"
+                placeholder="Filter by Organized By"
+                value={filterOrganizedBy}
+                onChange={(e) => setFilterOrganizedBy(e.target.value)}
+              />
+              <input
+                className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5"
+                type="text"
+                name="filterDate"
+                placeholder="Filter by Event Date"
+                value={filterDate}
+                onChange={(e) => setFilterDate(e.target.value)}
+              />
+            </div>
+          </div>
           <div className="w-full bg-white overflow-y-auto">
             <table className="w-full whitespace-nowrap">
               <thead>
                 <tr className="h-16 w-full text-sm leading-none text-gray-800">
-                  <th className="font-normal text-left pl-4">Event ImageOne</th>
-                  <th className="font-normal text-left pl-4">Event ImageTwo</th>
+                  <th className="font-normal text-left pl-4">Event Image One</th>
+                  <th className="font-normal text-left pl-4">Event Image Two</th>
                   <th className="font-normal text-left pl-4">Event Title</th>
                   <th className="font-normal text-left pl-4">Organized By</th>
                   <th className="font-normal text-left pl-12">Start Date</th>
@@ -160,57 +202,59 @@ export default function EventManagement() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {events &&
-                  events?.map((item) => (
-                    <tr
-                      key={item._id}
-                      className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
-                    >
-                      <td className="pl-4 cursor-pointer">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10">
-                            <img
-                              className="w-full h-full"
-                              src={item.eventImageOneUrl}
-                              alt="Thumbnail Image"
-                            />
-                          </div>
+                {filterEvents().map((item) => (
+                  <tr
+                    key={item._id}
+                    className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
+                  >
+                    <td className="pl-4 cursor-pointer">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10">
+                          <img
+                            className="w-full h-full"
+                            src={item.eventImageOneUrl}
+                            alt="Thumbnail Image"
+                          />
                         </div>
-                      </td>
-                      <td className="pl-4 cursor-pointer">
-                        <div className="flex items-center">
-                          <div className="w-10 h-10">
-                            <img
-                              className="w-full h-full"
-                              src={item.eventImageTwoUrl}
-                              alt="Thumbnail Image"
-                            />
-                          </div>
+                      </div>
+                    </td>
+                    <td className="pl-4 cursor-pointer">
+                      <div className="flex items-center">
+                        <div className="w-10 h-10">
+                          <img
+                            className="w-full h-full"
+                            src={item.eventImageTwoUrl}
+                            alt="Thumbnail Image"
+                          />
                         </div>
-                      </td>
-                      <td className="pl-12">
-                        <p className="text-sm font-medium leading-none text-gray-800">
-                          {item.eventTitle}
-                        </p>
-                      </td>
-                      <td className="pl-12">
-                        <p className="font-medium">{item.organizedBy}</p>
-                      </td>
-                      <td className="pl-20">
-                        <p className="font-medium">
-                          {formatDate(item.eventDate)}
-                        </p>
-                      </td>
-                      <td className="pl-20 overflow-y max-w-[200px] truncate">
-                        <p className="font-medium">{item.eventContent}</p>
-                      </td>
-                      <td className="pl-20 overflow-y max-w-[200px] truncate">
-                        <p className="font-medium">
-                          {new Date(item.createdAt).toLocaleDateString()}
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
+                      </div>
+                    </td>
+                    <td className="pl-12">
+                      <p className="text-sm font-medium leading-none text-gray-800">
+                        {item.eventTitle}
+                      </p>
+                    </td>
+                    <td className="pl-12">
+                      <p className="font-medium">{item.organizedBy}</p>
+                    </td>
+                    <td className="pl-20">
+                      <p className="font-medium">
+                        {formatDate(item.eventDate)}
+                      </p>
+                    </td>
+                    <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      <p className="font-medium">{item.eventContent}</p>
+                    </td>
+                    <td className="pl-20 overflow-y max-w-[200px] truncate">
+                      <p className="font-medium">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </p>
+                    </td>
+                    <td className="pl-16">
+                      {/* Add your action buttons here */}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -232,7 +276,7 @@ export default function EventManagement() {
               </div>
 
               <form className="space-y-6">
-                <h3 className=" leading-6 text-gray-900 text-center font-semibold text-2xl">
+                <h3 className="leading-6 text-gray-900 text-center font-semibold text-2xl">
                   Add new Event
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -321,14 +365,14 @@ export default function EventManagement() {
                   </label>
                   <input
                     type="file"
-                    accept = "application/pdf"
+                    accept="application/pdf"
                     className="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                     onChange={handleFileUpload}
                     required
                   />
                 </div>
                 <button
-                onClick={handleSubmit}
+                  onClick={handleSubmit}
                   disabled={isLoading}
                   className="w-full text-white bg-[#FF8534] hover:bg-[#F24E1E] focus:ring-4 focus:outline-none focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >

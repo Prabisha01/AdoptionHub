@@ -1,4 +1,4 @@
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
@@ -12,7 +12,7 @@ function VerifyPage({ isOpen, pet, close }) {
 
   const [formData, setFormData] = useState({
     ownedPetBefore: "",
-    havePet: "",
+    haveAPet: "",
     ownRent: "",
     permissionPet: "",
     houseApartment: "",
@@ -21,14 +21,15 @@ function VerifyPage({ isOpen, pet, close }) {
     travelFrequency: "",
     petCareArrangement: "",
     reasonForAdoption: "",
-    pet: pet._id,
-    user: user._id,
+    pet: pet?._id,
+    user: user?._id,
   });
 
   const [agreeErrors, setAgreeErrors] = useState({
     agreeToTermsError: false,
     agreeToShowHouseError: false,
   });
+
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     setFormData((prevFormData) => ({
@@ -145,42 +146,62 @@ function VerifyPage({ isOpen, pet, close }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-8 rounded shadow-md w-full max-w-4xl">
+    <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="absolute inset-0 backdrop-filter backdrop-blur-sm"></div>
+      <div
+        className="relative bg-white p-8 rounded"
+        style={{
+          width: '1102px',
+          height: '711px',
+          fontFamily: 'Poppins',
+          border: '2px solid black',
+          borderRadius: '25px',
+          overflowY: 'auto'
+        }}
+      >
         <div className="flex justify-between items-center mb-4">
-          <span className="text-lg font-bold">Verification Process</span>
-          <div className="flex flex-row justify-end">
+          <div className="flex flex-row justify-end w-full">
             <button
               title="Close Modal"
               onClick={close}
-              className="text-white bg-red-500 hover:bg-red-700 rounded-lg text-sm p-2 px-4"
+              className="text-black-500 hover:text-gray-700 rounded-lg text-sm p-2 px-4"
+              style={{ top: '29px', right: '27px', fontSize: '1.7rem', color: 'black' }}
             >
-              <FontAwesomeIcon icon={faTimes} />
+              <FontAwesomeIcon icon={faTimes} size="lg" />
             </button>
           </div>
         </div>
-        <div className="flex justify-around items-center mb-8">
+        <div className="flex justify-around items-center mb-8 relative">
           {["Verify", "Personal Data", "More Info"].map((item, index) => (
-            <div key={index} className="flex flex-col items-center">
+            <div key={index} className="flex flex-col items-center relative">
               <div
-                className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                className={`rounded-full flex items-center justify-center relative ${
                   index + 1 <= step
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200 text-gray-400"
                 }`}
+                style={{ width: '73px', height: '70px', fontSize: '35px' }}
               >
+                {index + 1 <= step && (
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className="absolute"
+                    style={{ top: '-10px', right: '-10px', color: 'white', fontSize: '15px' }}
+                  />
+                )}
                 {index + 1}
               </div>
               <div
                 className={`text-sm mt-2 ${
                   index + 1 < step ? "text-blue-500" : "text-gray-600"
                 } `}
+                style={{ fontSize: '20px', marginLeft: '10px' }}
               >
                 {item}
               </div>
               {index < 2 && (
                 <div
-                  className={`absolute mt-4 h-0.5 ml-28 w-40 ${
+                  className={`absolute mt-4 h-0.5 ml-28 w-[200px] ${
                     index + 1 < step ? "bg-blue-500" : "bg-gray-300"
                   }`}
                   style={{ transform: "translateX(50%)" }}
@@ -192,15 +213,16 @@ function VerifyPage({ isOpen, pet, close }) {
         <div>
           {step === 1 && (
             <>
-              {user.isVerified ? (
-                <div className="flex flex-col space-y-4">
+              {user?.isVerified ? (
+                <div className="flex flex-col space-y-4 items-center">
                   <div>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Email"
-                      className="form-input mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="form-input mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      style={{ width: '431px', height: '58px' }}
                     />
                   </div>
                   <div className="flex flex-row justify-start">
@@ -212,25 +234,44 @@ function VerifyPage({ isOpen, pet, close }) {
                 <div className="flex flex-col items-center space-y-4">
                   <label
                     htmlFor="email"
-                    className="flex flex-col items-start w-full max-w-md"
+                    className="flex flex-col items-center w-full max-w-md"
                   >
-                    <span className="text-sm text-gray-600 mb-1">
-                      Verify your email
-                    </span>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Email"
-                      className="form-input mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="form-input mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      style={{ width: '431px', height: '58px' }}
                     />
+                    <span className="text-sm text-gray-600 mb-1 mt-2">
+                      Note: Please verify first to move to further step of Adopting the Pet.
+                    </span>
                   </label>
                   <Link
                     type="button"
                     onClick={(e) => {
                       handleSubmit(e);
                     }}
-                    className="text-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full max-w-md"
+                    className="text-center bg-[#FF8534] hover:bg-[#FF7148] text-white font-bold py-2 px-4 rounded"
+                    style={{
+                      width: '431px',
+                      height: '58px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '10px',
+                      border: 'none',
+                      transition: 'background-color 500ms ease, border 500ms ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = '#FF7148';
+                      e.target.style.border = '2px solid black';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = '#FF8534';
+                      e.target.style.border = 'none';
+                    }}
                   >
                     {isLoading ? (
                       <CircularProgress color={"inherit"} size={20} />
@@ -250,23 +291,24 @@ function VerifyPage({ isOpen, pet, close }) {
             </>
           )}
           {step === 2 && (
-            <div className="flex flex-col items-center space-y-4">
-              <div className="w-4/5">
+            <div className="flex flex-col items-center space-y-4 h-full justify-center">
+              <div className="w-full max-w-md">
                 <label
-                  htmlFor="email"
-                  className="flex flex-col items-start w-full max-w-md"
+                  htmlFor="fullName"
+                  className="flex flex-col items-center w-full"
                 >
                   <input
-                    type="fullName"
+                    type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    placeholder="FullName"
+                    placeholder="Full Name"
                     className="form-input mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    style={{ width: '431px', height: '58px' }}
                   />
                 </label>
                 <label
                   htmlFor="address"
-                  className="flex flex-col items-start w-full max-w-md"
+                  className="flex flex-col items-center w-full mt-4"
                 >
                   <input
                     type="text"
@@ -274,12 +316,31 @@ function VerifyPage({ isOpen, pet, close }) {
                     onChange={(e) => setAddress(e.target.value)}
                     placeholder="Address"
                     className="form-input mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    style={{ width: '431px', height: '58px' }}
                   />
                 </label>
                 <Link
                   type="button"
                   onClick={updateAddress}
-                  className="mt-4 text-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full max-w-md"
+                  className="mt-4 text-center bg-[#FF8534] hover:bg-[#FF7148] text-white font-bold py-2 px-4 rounded"
+                  style={{
+                    width: '431px',
+                    height: '58px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '10px',
+                    border: 'none',
+                    transition: 'background-color 500ms ease, border 500ms ease',
+                  }}
+                  onMouseOver={(e) => {
+                    e.target.style.backgroundColor = '#FF7148';
+                    e.target.style.border = '2px solid black';
+                  }}
+                  onMouseOut={(e) => {
+                    e.target.style.backgroundColor = '#FF8534';
+                    e.target.style.border = 'none';
+                  }}
                 >
                   {isLoading ? (
                     <CircularProgress color={"inherit"} size={20} />
@@ -291,7 +352,7 @@ function VerifyPage({ isOpen, pet, close }) {
             </div>
           )}
           {step === 3 && (
-            <div className="bg-white p-6 rounded-lg overflow-y-scroll overflow-x-scroll max-w-[100vw] mx-auto">
+            <div className="bg-white p-6 rounded-lg overflow-y-auto overflow-x-hidden max-w-full mx-auto" style={{ height: 'calc(100% - 150px)' }}>
               <form className="space-y-4" onSubmit={handleSubmit}>
                 <div className="grid grid-cols-3 gap-6">
                   <div>
@@ -336,9 +397,9 @@ function VerifyPage({ isOpen, pet, close }) {
                     <div className="flex gap-2">
                       <input
                         type="radio"
-                        name="havePet"
+                        name="haveAPet"
                         value="true"
-                        checked={formData.havePet === "true"}
+                        checked={formData.haveAPet === "true"}
                         onChange={handleChange}
                         className="mt-1 cursor-pointer"
                       />
@@ -350,9 +411,9 @@ function VerifyPage({ isOpen, pet, close }) {
                       </label>
                       <input
                         type="radio"
-                        name="havePet"
+                        name="haveAPet"
                         value="false"
-                        checked={formData.havePet === "false"}
+                        checked={formData.haveAPet === "false"}
                         onChange={handleChange}
                         className="mt-1 cursor-pointer"
                       />
@@ -478,6 +539,7 @@ function VerifyPage({ isOpen, pet, close }) {
                     value={formData.peopleInHouse}
                     onChange={handleChange}
                     className="form-input mt-4 rounded-lg block w-full"
+                    style={{ height: '58px' }}
                   />
                   <input
                     type="text"
@@ -486,6 +548,7 @@ function VerifyPage({ isOpen, pet, close }) {
                     value={formData.hoursPetAlone}
                     onChange={handleChange}
                     className="form-input mt-4 rounded-lg block w-full"
+                    style={{ height: '58px' }}
                   />
                   <input
                     type="text"
@@ -494,6 +557,7 @@ function VerifyPage({ isOpen, pet, close }) {
                     value={formData.travelFrequency}
                     onChange={handleChange}
                     className="form-input mt-4 rounded-lg block w-full"
+                    style={{ height: '58px' }}
                   />
                   <input
                     type="text"
@@ -502,6 +566,7 @@ function VerifyPage({ isOpen, pet, close }) {
                     value={formData.petCareArrangement}
                     onChange={handleChange}
                     className="form-input mt-4 rounded-lg block w-full"
+                    style={{ height: '58px' }}
                   />
                 </div>
                 <textarea
@@ -555,7 +620,25 @@ function VerifyPage({ isOpen, pet, close }) {
                   <Link
                     type="button"
                     onClick={handleAdoptPet}
-                    className="text-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full max-w-md"
+                    className="text-center bg-[#FF8534] hover:bg-[#FF7148] text-white font-bold py-2 px-4 rounded"
+                    style={{
+                      width: '431px',
+                      height: '58px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '10px',
+                      border: 'none',
+                      transition: 'background-color 500ms ease, border 500ms ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.target.style.backgroundColor = '#FF7148';
+                      e.target.style.border = '2px solid black';
+                    }}
+                    onMouseOut={(e) => {
+                      e.target.style.backgroundColor = '#FF8534';
+                      e.target.style.border = 'none';
+                    }}
                   >
                     {isLoading ? (
                       <CircularProgress color={"inherit"} size={20} />
@@ -569,23 +652,37 @@ function VerifyPage({ isOpen, pet, close }) {
           )}
         </div>
 
-        <div className="flex justify-between mt-8">
-          <button
-            onClick={prevStep}
-            disabled={step === 1}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-          >
-            Back
-          </button>
-          {step === 3 ? null : (
+        <div className="flex justify-center mt-8">
+          {step > 1 && (
+            <button
+              onClick={prevStep}
+              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+              style={{
+                width: '181px',
+                height: '58px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              Back
+            </button>
+          )}
+          {step < 3 && (
             <button
               onClick={() => {
                 nextStep();
               }}
-              disabled={step === 3}
               className="bg-blue-500 cursor-pointer hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r"
+              style={{
+                width: '181px',
+                height: '58px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
             >
-              {step === 3 ? null : "Next"}
+              Next
             </button>
           )}
         </div>

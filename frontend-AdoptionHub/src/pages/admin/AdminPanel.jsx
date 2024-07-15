@@ -5,18 +5,18 @@ import CustomFaIcons from "../../components/CustomFaIcons";
 import "../../style/AdminPanel.css";
 import AdminDashBoard from "./admin_dashboard/AdminDashboard";
 import Adopt from "./AdoptManagement";
-import Contact from "./Contact";
+import ContactManagement from "./ContactManagement";
 import Donate from "./Donate";
 import EventManagenent from "./EventManagement";
-import Order from "./Order";
+import OrderManagement from "./OrderManagement";
 import ProductCategory from "./ProductCategory";
 import ProductManagement from "./ProductManagement";
-import Story from "./Story";
+import StoryManagement from "./StoryManagement";
 
 function AdminPanel() {
   const storedPage = localStorage.getItem("currentPage");
   // Initialize the current page with the stored value or the default value
-  const initialPage = storedPage || "Dashboard";
+  const initialPage = storedPage || "Product";
 
   const users = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function AdminPanel() {
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.clear();
-    navigate("/login");
+    navigate("/");
     window.location.reload();
   };
   // Use state to keep track of the current page
@@ -41,8 +41,8 @@ function AdminPanel() {
     case "Product Category":
       content = <ProductCategory />;
       break;
-    case "Order":
-      content = <Order />;
+    case "OrderManagement":
+      content = <OrderManagement />;
       break;
     case "Adopt":
       content = <Adopt />;
@@ -53,11 +53,11 @@ function AdminPanel() {
     case "Event":
       content = <EventManagenent />;
       break;
-    case "Story":
-      content = <Story />;
+    case "StoryManagement":
+      content = <StoryManagement />;
       break;
-    case "Contact":
-      content = <Contact />;
+    case "ContactManagement":
+      content = <ContactManagement />;
       break;
     default: {
       content = <AdminDashBoard />;
@@ -105,10 +105,10 @@ function AdminPanel() {
             </li>
 
             <li
-              className={`adminLi ${currentPage === "Order" ? "active" : ""}`}
+              className={`adminLi ${currentPage === "OrderManagement" ? "active" : ""}`}
             >
-              <button onClick={() => setCurrentPage("Order")} tabIndex="3">
-                Order
+              <button onClick={() => setCurrentPage("OrderManagement")} tabIndex="3">
+                OrderManagement
               </button>
             </li>
             <li
@@ -133,17 +133,17 @@ function AdminPanel() {
               </button>
             </li>
             <li
-              className={`adminLi ${currentPage === "Story" ? "active" : ""}`}
+              className={`adminLi ${currentPage === "StoryManagement" ? "active" : ""}`}
             >
-              <button onClick={() => setCurrentPage("Story")} tabIndex="7">
-                Story
+              <button onClick={() => setCurrentPage("StoryManagement")} tabIndex="7">
+                StoryManagement
               </button>
             </li>
             <li
-              className={`adminLi ${currentPage === "Contact" ? "active" : ""}`}
+              className={`adminLi ${currentPage === "ContactManagement" ? "active" : ""}`}
             >
-              <button onClick={() => setCurrentPage("Contact")} tabIndex="8">
-                Contact
+              <button onClick={() => setCurrentPage("ContactManagement")} tabIndex="8">
+                Contact Management
               </button>
             </li>
           </ul>
@@ -161,7 +161,7 @@ function AdminPanel() {
                       src="/assets/images/sure_about_that.jpg"
                       alt=""
                     />
-                    Are you sure about that 👁️👁️?
+                    Are you sure to logout ?
                   </h6>
                   <div className="flex flex-wrap items-center justify-between m-0 w-full">
                     <button

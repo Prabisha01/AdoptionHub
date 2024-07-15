@@ -4,13 +4,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { getAllEventsApi } from '../apis/Api';
 import EventDetailsModal from './SingleEvent';
-import './style/calendar.css';
+import '../style/calendar.css'; // Import the CSS file
 
 const AllEvents = () => {
   const calendarRef = useRef(null);
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentTitle, setCurrentTitle] = useState('');
+  const [activeView, setActiveView] = useState('dayGridMonth');
 
   const fetchEvents = async () => {
     try {
@@ -35,6 +37,9 @@ const AllEvents = () => {
 
   useEffect(() => {
     fetchEvents();
+    if (calendarRef.current) {
+      setCurrentTitle(calendarRef.current.getApi().currentData.viewTitle);
+    }
   }, []);
 
   const handleEventClick = (info) => {
@@ -50,7 +55,7 @@ const AllEvents = () => {
 
   const renderEventContent = (eventInfo) => {
     return (
-      <div className="bg-blue-500 cursor-pointer text-white rounded-md px-2 py-1 text-center">
+      <div className="event-content">
         {eventInfo.event.title}
       </div>
     );
@@ -59,55 +64,80 @@ const AllEvents = () => {
   const handlePrevClick = () => {
     const calendarApi = calendarRef.current.getApi();
     calendarApi.prev();
+    setCurrentTitle(calendarApi.currentData.viewTitle);
   };
 
   const handleNextClick = () => {
     const calendarApi = calendarRef.current.getApi();
     calendarApi.next();
+    setCurrentTitle(calendarApi.currentData.viewTitle);
   };
 
   const handleTodayClick = () => {
     const calendarApi = calendarRef.current.getApi();
     calendarApi.today();
+    setCurrentTitle(calendarApi.currentData.viewTitle);
+  };
+
+  const handleViewChange = (view) => {
+    const calendarApi = calendarRef.current.getApi();
+    calendarApi.changeView(view);
+    setCurrentTitle(calendarApi.currentData.viewTitle);
+    setActiveView(view);
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col" style={{ paddingTop: '150px', paddingLeft: '120px', paddingRight: '120px' }}> {/* Adjusted padding */}
-      <FullCalendar
-        ref={calendarRef}
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        eventClick={handleEventClick}
-        height="100%"
-        eventContent={renderEventContent}
-        customButtons={{
-          myPrev: {
-            text: 'Back',
-            click: handlePrevClick
-          },
-          myNext: {
-            text: 'Next',
-            click: handleNextClick
-          },
-          myToday: {
-            text: 'Today',
-            click: handleTodayClick
-          }
-        }}
-        headerToolbar={{
-          left: 'myToday,myPrev,myNext',
-          center: 'title',
-          right: 'dayGridMonth,dayGridWeek,dayGridDay'
-        }}
-        titleFormat={{ year: 'numeric', month: 'long' }}
-        buttonText={{
-          month: 'Month',
-          week: 'Week',
-          day: 'Day'
-        }}
-        buttonIcons={false}
-      />
+    <div className="h-screen w-screen flex flex-col">
+      <div className="fc-toolbar">
+        <div className="fc-button-group">
+          <button className="fc-button" onClick={handleTodayClick}>Today</button>
+          <button className="fc-button" onClick={handlePrevClick}>Back</button>
+          <button className="fc-button" onClick={handleNextClick}>Next</button>
+        </div>
+        <div className="fc-toolbar-title">{currentTitle}</div>
+        <div className="fc-button-group view-buttons">
+          <button
+            type="button"
+            className={`fc-button ${activeView === 'dayGridMonth' ? 'fc-button-active' : ''}`}
+            onClick={() => handleViewChange('dayGridMonth')}
+          >
+            Month
+          </button>
+          <button
+            type="button"
+            className={`fc-button ${activeView === 'dayGridWeek' ? 'fc-button-active' : ''}`}
+            onClick={() => handleViewChange('dayGridWeek')}
+          >
+            Week
+          </button>
+          <button
+            type="button"
+            className={`fc-button ${activeView === 'dayGridDay' ? 'fc-button-active' : ''}`}
+            onClick={() => handleViewChange('dayGridDay')}
+          >
+            Day
+          </button>
+        </div>
+      </div>
+      <div className="calendar-container">
+        <FullCalendar
+          ref={calendarRef}
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={events}
+          eventClick={handleEventClick}
+          height="auto" // Use 'auto' to allow the calendar to grow with the content
+          eventContent={renderEventContent}
+          headerToolbar={false} // Hide the default header
+          titleFormat={{ year: 'numeric', month: 'long' }}
+          buttonText={{
+            month: 'Month',
+            week: 'Week',
+            day: 'Day'
+          }}
+          buttonIcons={false}
+        />
+      </div>
       <EventDetailsModal
         event={selectedEvent}
         isOpen={isModalOpen}

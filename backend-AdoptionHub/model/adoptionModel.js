@@ -2,11 +2,6 @@ const mongoose = require("mongoose");
 
 const adoptSchema = new mongoose.Schema(
   {
-    isVerified: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
     ownedPetBefore: {
       type: Boolean,
       required: true,

@@ -1,4 +1,11 @@
 import {
+  faCartArrowDown,
+  faPersonCircleQuestion,
+  faRightFromBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
   Disclosure,
   Menu,
   MenuButton,
@@ -12,8 +19,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoginModal from "../pages/Login";
 import RegisterModal from "../pages/Register";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartArrowDown, faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const navigation = [
   { name: "Adopt", href: "/adopt", current: false },
@@ -118,7 +123,7 @@ export default function Navbar() {
                             <Link
                               to={`/profile/${user._id}`}
                               className={classNames(
-                                active ? "bg-gray-100" : "",
+                                active ? "bg-[#FFA500]" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
@@ -129,9 +134,22 @@ export default function Navbar() {
                         <MenuItem>
                           {({ active }) => (
                             <Link
+                              to={`/pet-req/${user._id}`}
+                              className={classNames(
+                                active ? "bg-[#FFA500]" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              My Pet Requests
+                            </Link>
+                          )}
+                        </MenuItem>
+                        <MenuItem>
+                          {({ active }) => (
+                            <Link
                               to={`/changePassword/${user._id}`}
                               className={classNames(
-                                active ? "bg-gray-100" : "",
+                                active ? "bg-[#FFA500]" : "",
                                 "block px-4 py-2 text-sm text-gray-700"
                               )}
                             >
@@ -141,10 +159,36 @@ export default function Navbar() {
                         </MenuItem>
                         <MenuItem>
                           {({ active }) => (
+                            <Link
+                              to={`/my-cart`}
+                              className={classNames(
+                                active ? "bg-[#FFA500]" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              Cart
+                            </Link>
+                          )}
+                        </MenuItem>
+                        <MenuItem>
+                          {({ active }) => (
+                            <Link
+                              to={`/my-orders/${user._id}`}
+                              className={classNames(
+                                active ? "bg-[#FFA500]" : "",
+                                "block px-4 py-2 text-sm text-gray-700"
+                              )}
+                            >
+                              My Orders
+                            </Link>
+                          )}
+                        </MenuItem>
+                        <MenuItem>
+                          {({ active }) => (
                             <button
                               onClick={logout}
                               className={classNames(
-                                active ? "bg-gray-100" : "",
+                                active ? "bg-[#FFA500]" : "",
                                 "block px-4 py-2 text-sm text-gray-700 w-full text-left"
                               )}
                             >
@@ -157,7 +201,7 @@ export default function Navbar() {
                   </Menu>
                   <div className="ml-2">
                     <span className="block text-sm font-medium text-gray-900">Welcome!!</span>
-                    <span className="block text-sm font-medium text-gray-500">{user.fullName}</span>
+                    <span className="block text-sm font-medium text-gray-500">{user?.fullName}</span>
                   </div>
                   <Link
                     to="/donate"
@@ -195,7 +239,7 @@ export default function Navbar() {
                 <div className="flex space-x-4">
                   <button
                     onClick={openLoginModal}
-                    className="bg-white text-black border border-solid border-gray-300 px-4 py-2 rounded-lg hover:bg-[#F24E1E] hover:text-white hover:border-transparent"
+                    className="bg-white text-black border border-solid border-gray-300 px-4 py-2 rounded-lg"
                     style={{
                       color: "#000",
                       border: "2px solid #000",
@@ -216,7 +260,7 @@ export default function Navbar() {
                       left: "10px",
                     }}
                     onMouseOver={(e) => {
-                      e.target.style.backgroundColor = "#FF7148";
+                      e.target.style.backgroundColor = "#FFA500";
                       e.target.style.border = "none";
                       e.target.style.color = "#FFFFFF";
                     }}

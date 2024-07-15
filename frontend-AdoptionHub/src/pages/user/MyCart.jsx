@@ -1,12 +1,14 @@
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { getAllCartApi, removeCartApi } from "../../apis/Api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function MyCart() {
   const [cartItems, setCartItems] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate();
 
   const fetchMyCartItems = () => {
     getAllCartApi(user._id)
@@ -29,13 +31,11 @@ function MyCart() {
   );
 
   const handleQuantityChange = (id, delta) => {
-    console.log("Before update", cartItems);
     setCartItems((currentItems) =>
       currentItems.map((item) =>
         item._id === id ? { ...item, quantity: item.quantity + delta } : item
       )
     );
-    console.log("After update", cartItems);
   };
 
   const handleRemove = (id) => {
@@ -54,11 +54,12 @@ function MyCart() {
       });
   };
 
+  const makePayment = () => {
+    navigate("/payment", { state: { cartItems, total, user } });
+  };
+
   return (
-    <div
-      className="
-     mx-auto mb-32 p-4 overflow-x-scroll"
-    >
+    <div className="mx-auto mb-32 p-4 mt-32 overflow-x-scroll">
       <table className="table-auto w-full">
         <thead>
           <tr className="bg-gray-200">
@@ -119,7 +120,10 @@ function MyCart() {
         <strong>Total - {total.toFixed(2)}</strong>
       </div>
       <div className="flex flex-row justify-end">
-        <button className="bg-[#FF8534] hover:bg-[#F24E1E] text-white px-4 py-2 mt-4 rounded">
+        <button
+          onClick={makePayment}
+          className="bg-[#FF8534] hover:bg-[#F24E1E] text-white px-4 py-2 mt-4 rounded"
+        >
           Proceed To Checkout
         </button>
       </div>

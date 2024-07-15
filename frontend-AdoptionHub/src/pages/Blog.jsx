@@ -160,13 +160,13 @@ const Blog = () => {
                   <Link
                     className="btn btn-outline-dark rounded-pill me-2 "
                     style={{ marginLeft: "9rem" }}
-                    to={"/login"}
+                    to={"/"}
                   >
                     Login
                   </Link>
                   <Link
                     className="btn btn-outline-dark rounded-pill  me-3"
-                    to={"/signup"}
+                    to={"/"}
                   >
                     Register
                   </Link>

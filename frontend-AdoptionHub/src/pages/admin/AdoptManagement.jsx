@@ -10,10 +10,14 @@ import { deleteAdoptionApi, getAllAdoptionReqApi } from "../../apis/Api";
 
 export default function AdoptManagement() {
   const [adoption, setAdoption] = useState([]);
-
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState("desc");
   const [requestII, setRequestII] = useState("");
+
+  // State for filters
+  const [filterName, setFilterName] = useState("");
+  const [filterDistrict, setFilterDistrict] = useState("");
+  const [filterMunicipality, setFilterMunicipality] = useState("");
 
   const fetchAllAdoption = async () => {
     try {
@@ -53,12 +57,27 @@ export default function AdoptManagement() {
     });
   };
 
+  const handleFilterChange = (e, setFilter) => {
+    setFilter(e.target.value);
+  };
+
+  const filteredAdoption = adoption.filter((item) => {
+    return (
+      (filterName === "" ||
+        item.pet.fullName.toLowerCase().includes(filterName.toLowerCase())) &&
+      (filterDistrict === "" ||
+        item.user.address.toLowerCase().includes(filterDistrict.toLowerCase())) &&
+      (filterMunicipality === "" ||
+        item.user.address.toLowerCase().includes(filterMunicipality.toLowerCase()))
+    );
+  });
+
   return (
     <>
       <div className="w-full sm:px-6">
         <div className="px-4 md:px-10 py-2 md:py-7 bg-gray-100 rounded-tl-lg rounded-tr-lg">
           <div className="sm:flex flex-row items-center justify-between">
-            <p className="inline-flex sm:ml-3  sm:mt-0 items-start justify-start px-6 py-3  text-black focus:outline-none rounded">
+            <p className="inline-flex sm:ml-3 sm:mt-0 items-start justify-start px-6 py-3 text-black focus:outline-none rounded">
               Adoption Management
             </p>
           </div>
@@ -66,22 +85,25 @@ export default function AdoptManagement() {
         <div className="bg-white shadow px-4 md:px-10 pt-4 md:pt-7 pb-5">
           <div className="flex w-100 my-4 gap-2">
             <input
-              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
               type="text"
-              name="bbName"
               placeholder="Filter by Adoption Name"
+              value={filterName}
+              onChange={(e) => handleFilterChange(e, setFilterName)}
             />
             <input
-              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
               type="text"
-              name="bbAddress"
               placeholder="Filter by District"
+              value={filterDistrict}
+              onChange={(e) => handleFilterChange(e, setFilterDistrict)}
             />
             <input
-              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
+              className="w-1/3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500"
               type="text"
-              name="municipality"
               placeholder="Filter by Municipality"
+              value={filterMunicipality}
+              onChange={(e) => handleFilterChange(e, setFilterMunicipality)}
             />
           </div>
 
@@ -115,15 +137,21 @@ export default function AdoptManagement() {
                 </tr>
               </thead>
               <tbody className="w-full">
-                {adoption &&
-                  adoption?.map((item) => (
-                    <tr className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100">
+                {filteredAdoption &&
+                  filteredAdoption.map((item) => (
+                    <tr
+                      key={item._id}
+                      className="h-20 text-sm leading-none text-gray-800 bg-white hover:bg-gray-100 border-b border-t border-gray-100"
+                    >
                       <td className="pl-4 cursor-pointer">
                         <div className="flex items-center">
                           <div className="w-10 h-10">
                             <img
                               className="w-full h-full"
-                              src={item.pet.petImageUrlOne}
+                              src={
+                                item.pet.petImageUrlOne ??
+                                item.pet.petImageUrlFive
+                              }
                               alt="Adoption Image"
                             />
                           </div>
@@ -184,13 +212,13 @@ export default function AdoptManagement() {
                             className="fixed inset-0 flex items-center justify-center bg-opacity-20 overflow-y-auto h-full w-full"
                             id="my-modal"
                           >
-                            <div className="relative mx-auto p-5 border  shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
+                            <div className="relative mx-auto p-5 border shadow-sm w-1/4 rounded-md bg-white space-y-8 justify-center items-center flex flex-col">
                               <h6 className="font-medium w-3/4 mx-auto text-center">
                                 <FontAwesomeIcon
                                   className="text-red-500 mr-2"
                                   icon={faExclamationCircle}
                                 />
-                                Are you sure about that ?
+                                Are you sure about that action?
                               </h6>
                               <div className="flex flex-wrap items-center justify-between mx-auto w-full">
                                 <button

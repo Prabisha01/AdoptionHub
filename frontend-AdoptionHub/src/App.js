@@ -17,6 +17,15 @@ import AllEvents from "./pages/AllEvents";
 import MyPetRequests from "./pages/user/MyPetRequest";
 import Footers from "./components/Footers";
 import MyCart from "./pages/user/MyCart";
+import PasswordForgot from "./pages/PasswordForgot";
+import UpdatedPassword from "./pages/NewPassword";
+import NewPassword from "./pages/NewPassword";
+import LoginModal from "./pages/Login";
+import UpdatedPasswords from "./pages/PasswordNew";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancel from "./pages/PaymentCancel";
+import PaymentPage from "./pages/user/PaymentPage";
+import MyOrders from "./pages/user/MyOrders";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -27,8 +36,8 @@ function App() {
 
       <Routes>
         <Route path="/admin-dashboard" element={<AdminPanel />} />
-
         <Route path="/home" element={<LandingPage />} />
+        <Route path="/login" element={<LoginModal />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/my-cart" element={<MyCart />} />
@@ -37,9 +46,16 @@ function App() {
         <Route path="/event" element={<AllEvents />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/pet-req/:id" element={<MyPetRequests />} />
+        <Route path="/my-orders/:id" element={<MyOrders />} />
+        <Route path = "/reset_password/:token" element ={<NewPassword/>} />
         <Route path="/adopt" element={<Adopt />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/success" element={<PaymentSuccess />} />
+        <Route path="/cancel" element={<PaymentCancel />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product-details" element={<ProductDetails />} />
+        <Route path="/changePassword/:id" element={<UpdatedPasswords />} />
+        <Route path="/passwordForget" element={<PasswordForgot />} />
       </Routes>
       {user?.isAdmin ? null : <Footers />}
     </Router>

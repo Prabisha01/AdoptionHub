@@ -40,7 +40,7 @@ export const getSingleContactApi = (id) =>
 
 //delete contact API
 export const deleteContactApi = (id) =>
-  Api.delete(`/api/contact/delete_contact/${id}`, config);
+  Api.delete(`/api/contact/delete_contact/${id}`);
 
 //get all user
 export const getAllUserApi = () => Api.get("/api/user/get_user");
@@ -205,10 +205,10 @@ export const createOrderApi = (data) =>
   Api.post("/api/order/createOrder", data, config);
 
 //get order
-export const getOrder = (id) => Api.get(`/api/order/getOrder/${id}`, config);
+export const getMyOrderApi = (id) => Api.get(`/api/order/getOrder/${id}`);
 
 //get all
-export const getAllOrder = () => Api.get(`/api/order/get_orders`);
+export const getAllOrderApi = () => Api.get(`/api/order/get_all_orders`);
 
 //get all notification
 export const getallnotification = () =>
@@ -230,3 +230,15 @@ export const getAllAdoptionReqApi = () => Api.get("/api/adopt/get-all-adoptions"
 export const deleteAdoptionApi = (id) => Api.delete(`/api/adopt/delete-adoption/${id}`);
 
 export const getMyAdoptionReqApi = (id) => Api.get(`/api/adopt/get-my-adoption/${id}`);
+
+
+
+// story 
+export const createStoryApi = (data) =>
+  Api.post("/api/story/create-story", data, config);
+
+export const getAllStoryApi = () => Api.get("/api/story/get-all-storys");
+
+export const getSingleStoryApi = (id) => Api.get(`/api/story/get-story/${id}`);
+
+export const deleteStoryApi = (id) => Api.delete(`/api/story/delete-story/${id}`, config);

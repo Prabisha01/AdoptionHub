@@ -2,24 +2,14 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { resetPasswordApi } from "../apis/Api";
-import wall from "../images/wall.jpg";
-import Navbar from "../components/Navbar";
-import UpNavbar from "../components/UpNavbar";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NewPassword = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const { token } = useParams();
-  const bgImage = {
-    backgroundImage: `url(${wall})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    minHeight: "81vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,16 +20,12 @@ const NewPassword = () => {
     }
 
     try {
-      // const token = new URLSearchParams(window.location.search).get("token");
-      console.log(token, "forgot pass");
-      const data = {
-        password: password,
-      };
+      const data = { password: password };
       const response = await resetPasswordApi(token, data);
 
       if (response.data.success) {
         toast.success(response.data.message);
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(response.data.message);
       }
@@ -50,106 +36,76 @@ const NewPassword = () => {
   };
 
   return (
-    <>
-      <div>
-        <UpNavbar />
-      </div>
-      <div>
-        <Navbar />
-      </div>
-      <>
-        <div style={bgImage}></div>
-        <div
-          style={{
-            position: "fixed",
-            top: "80px",
-            right: "20px",
-            borderRadius: "8px",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "30px",
-              borderRadius: "4px",
-            }}
+    <div className="fixed inset-0 flex items-center justify-center z-10 backdrop-blur-sm" style={{ fontFamily: "Poppins, sans-serif" }}>
+      <div className="bg-white rounded-lg shadow-lg flex border border-black">
+        <div className="w-1/2">
+          <img
+            src="/assets/images/login.png"
+            alt="Adopt Me"
+            className="h-full w-[600px] object-cover rounded-l-lg"
+          />
+        </div>
+        <div className="w-1/2 p-6 relative">
+          <button
+            onClick={() => navigate('/')}
+            className="absolute top-4 right-4 text-gray-700 text-xl"
           >
-            <h1
-              style={{
-                color: "green",
-                fontSize: "2em",
-                fontWeight: "bold",
-                textAlign: "center",
-                marginBottom: "20px",
-              }}
-            >
-              Change Your Password
-            </h1>
-
-            <form style={{ display: "flex", flexDirection: "column" }}>
-              <label style={{ color: "#333", marginBottom: "5px" }}>
-                Password
-              </label>
-              <input
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder="Enter your new password"
-                style={{
-                  padding: "10px",
-                  marginBottom: "20px",
-                  width: "100%",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                }}
-              />
-              <label style={{ color: "#333", marginBottom: "5px" }}>
-                Confirm Password
-              </label>
-              <input
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                type="password"
-                placeholder="Re-Enter your new password"
-                style={{
-                  padding: "10px",
-                  marginBottom: "20px",
-                  width: "100%",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                }}
-              />
+            &times;
+          </button>
+          <img src="/assets/logo/logo.png" alt="" className="mb-5" />
+          <h2 className="text-xl font-bold text-gray-800 mb-4">
+            Change Your Password
+          </h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <div className="relative">
+                <span className="absolute bottom-3 flex items-center pl-3">
+                  <FontAwesomeIcon icon={faLock} className="text-gray-950" />
+                </span>
+                <input
+                  placeholder="Enter your new password"
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-8 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-950"
+                />
+              </div>
+            </div>
+            <div className="mb-4">
+              <div className="relative">
+                <span className="absolute bottom-3 flex items-center pl-3">
+                  <FontAwesomeIcon icon={faLock} className="text-gray-950" />
+                </span>
+                <input
+                  placeholder="Re-Enter your new password"
+                  type="password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full pl-8 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-gray-950"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col items-start gap-3">
               <button
                 type="submit"
-                style={{
-                  backgroundColor: "#28a745",
-                  color: "#fff",
-                  padding: "10px 20px",
-                  borderRadius: "4px",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "1em",
-                  fontWeight: "bold",
-                  transition: "background-color 0.3s",
-                }}
-                onClick={handleSubmit}
+                className="bg-orange-500 w-full hover:bg-orange-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Submit
               </button>
-            </form>
-            <p
-              style={{ textAlign: "center", marginTop: "20px", color: "#666" }}
-            >
-              Know the Password?{" "}
-              <a
-                href="/login"
-                style={{ color: "#333", textDecoration: "none" }}
+              <p
+                style={{ textAlign: "center", marginTop: "20px", color: "#666" }}
               >
-                Back to Login
-              </a>
-            </p>
-          </div>
+                Know the Password?{" "}
+                <a
+                  href="/"
+                  className="text-blue-800 underline"
+                >
+                  Back to Login
+                </a>
+              </p>
+            </div>
+          </form>
         </div>
-      </>
-    </>
+      </div>
+    </div>
   );
 };
 

@@ -7,7 +7,7 @@ const UserRoutes = () => {
     return user != null 
   && user != null ? 
   <Outlet/> 
-  : navigate('/login')
+  : navigate('/')
    
   
 }
